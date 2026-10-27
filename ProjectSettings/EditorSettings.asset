@@ -18,7 +18,7 @@ EditorSettings:
   m_EtcTextureNormalCompressor: 2
   m_EtcTextureBestCompressor: 4
   m_ProjectGenerationIncludedExtensions: txt;xml;fnt;cd;asmdef;asmref;rsp
-  m_ProjectGenerationRootNamespace: 
+  m_ProjectGenerationRootNamespace: MyProject
   m_EnableTextureStreamingInEditMode: 1
   m_EnableTextureStreamingInPlayMode: 1
   m_EnableEditorAsyncCPUTextureLoading: 0
@@ -50,4 +50,4 @@ EditorSettings:
   m_ReferencedClipsExactNaming: 1
   m_ForceAssetUnloadAndGCOnSceneLoad: 1
   m_HideBuildProfileClassicPlatforms: 1
-  m_UseLegacyHierarchy: 0
+  m_UseLegacyHierarchy: 1
