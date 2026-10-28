@@ -13,5 +13,6 @@ MonoBehaviour:
   m_Name: Melee Skill Config
   m_EditorClassIdentifier: Assembly-CSharp::MyProject.MeleeSkillConfig
   sprite: {fileID: 21300000, guid: 62262e6c1c3a1504f8a28a9efcb74f4f, type: 3}
+  tip: Melee attack to frotline enemy, but if you is frontline character
   minDamage: 3
   maxDamage: 6

@@ -8,6 +8,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 3140474335331292217, guid: a1f5975e8cf3d9e45a73c25c63622a2f, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: -7662119625886864339, guid: 2efb2165ddd26e343821398308c62147, type: 2}
     - target: {fileID: 4113259810892896887, guid: a1f5975e8cf3d9e45a73c25c63622a2f, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -48,6 +52,30 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4611627067624395982, guid: a1f5975e8cf3d9e45a73c25c63622a2f, type: 3}
+      propertyPath: m_fontSizeBase
+      value: 1.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4611627067624395982, guid: a1f5975e8cf3d9e45a73c25c63622a2f, type: 3}
+      propertyPath: m_hasFontAssetChanged
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4950105128532839360, guid: a1f5975e8cf3d9e45a73c25c63622a2f, type: 3}
+      propertyPath: m_fontSize
+      value: 2.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 4950105128532839360, guid: a1f5975e8cf3d9e45a73c25c63622a2f, type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: 2efb2165ddd26e343821398308c62147, type: 2}
+    - target: {fileID: 4950105128532839360, guid: a1f5975e8cf3d9e45a73c25c63622a2f, type: 3}
+      propertyPath: m_sharedMaterial
+      value: 
+      objectReference: {fileID: -7662119625886864339, guid: 2efb2165ddd26e343821398308c62147, type: 2}
+    - target: {fileID: 4950105128532839360, guid: a1f5975e8cf3d9e45a73c25c63622a2f, type: 3}
+      propertyPath: m_hasFontAssetChanged
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6695958951770860595, guid: a1f5975e8cf3d9e45a73c25c63622a2f, type: 3}
       propertyPath: m_Sprite
       value: 
@@ -56,6 +84,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Archer
       objectReference: {fileID: 0}
+    - target: {fileID: 9210014670024678507, guid: a1f5975e8cf3d9e45a73c25c63622a2f, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

@@ -7,7 +7,7 @@ namespace MyProject
     {
         public override Skill CreateSkill()
         {
-            throw new System.NotImplementedException();
+            return new SkipTurnSkill(this);
         }
     }
 }

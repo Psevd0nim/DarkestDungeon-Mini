@@ -1,7 +1,12 @@
 namespace MyProject
 {
-    public class TurnSkipSkill : Skill
+    public class SkipTurnSkill : Skill
     {
+        public SkipTurnSkill(SkipTurnSkillConfig skipTurnSkillConfig)
+        {
+            Config = skipTurnSkillConfig;
+        }
+
         public override void UseSkill(SkillsManager skillsManager)
         {
             throw new System.NotImplementedException();

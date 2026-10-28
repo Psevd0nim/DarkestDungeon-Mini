@@ -18,6 +18,6 @@ MonoBehaviour:
     speed: 10
     attack: 10
     defense: 10
-    skillConfigList:
-    - {fileID: 11400000, guid: d9aeb144321b6484ca8c1d8eab1f0c71, type: 2}
-    - {fileID: 11400000, guid: cb653d12476c52e41964cef88e6203d9, type: 2}
+  skillConfigList:
+  - {fileID: 11400000, guid: cb653d12476c52e41964cef88e6203d9, type: 2}
+  - {fileID: 11400000, guid: d9aeb144321b6484ca8c1d8eab1f0c71, type: 2}

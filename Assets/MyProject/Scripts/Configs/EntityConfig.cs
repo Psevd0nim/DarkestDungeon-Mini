@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace MyProject
@@ -7,5 +8,6 @@ namespace MyProject
     {
         public EntityType entityType;
         public EntityData entityData;
+        public List<SkillConfig> skillConfigList;
     }
 }

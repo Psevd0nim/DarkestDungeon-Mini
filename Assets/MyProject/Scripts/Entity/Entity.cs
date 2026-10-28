@@ -35,18 +35,14 @@ namespace MyProject
             SetCharacterActive(false);
         }
 
-        public void Init(EntityData entityData)
+        public void Init(EntityData entityData, List<Skill> skillList)
         {
             Health = entityData.health;
             _maxHealth = entityData.health;
             Speed = entityData.speed;
             Attack = entityData.attack;
             Defense = entityData.defense;
-            foreach (var skillConfig in entityData.skillConfigList)
-            {
-                Skill skill = skillConfig.CreateSkill();
-                SkillList.Add(skill);
-            }
+            SkillList = skillList;
             _healthBar.UpdateHealthBar(Health, _maxHealth);
         }
 

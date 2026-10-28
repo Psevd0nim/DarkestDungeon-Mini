@@ -18,7 +18,7 @@ namespace MyProject
 
             _fightManager.Init(_entitiesManager, _gameUIManager, _skillsManager);
 
-            _entitiesManager.Init(_factory, _gameUIManager);
+            _entitiesManager.Init(_factory, _gameUIManager, _skillsManager);
 
             _gameUIManager.Init(_factory);
 

@@ -10,6 +10,13 @@ namespace MyProject
         public float speed;
         public float attack;
         public float defense;
-        public List<SkillConfig> skillConfigList;
+
+        public EntityData(EntityData entityData)
+        {
+            health = entityData.health;
+            speed = entityData.speed;
+            attack = entityData.attack;
+            defense = entityData.defense;
+        }
     }
 }

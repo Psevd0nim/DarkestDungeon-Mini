@@ -19,10 +19,12 @@ namespace MyProject
 
         private Factory _factory;
         private List<Entity> _allCharacters = new List<Entity>();
+        private SkillsManager _skillsManager;
 
-        public void Init(Factory factory, Game_UI_Manager game_UI_Manager)
+        public void Init(Factory factory, Game_UI_Manager game_UI_Manager, SkillsManager skillsManager)
         {
             _factory = factory;
+            _skillsManager = skillsManager;
             _playerSquadController.Init(this, _squadSettingsConfig.GetRandomColor());
             _enemySquadController.Init(this, _squadSettingsConfig.GetRandomColorWithException(_playerSquadController.SquadColor.colorType), needReverse: true);
         }
@@ -45,7 +47,8 @@ namespace MyProject
         {
             EntityConfig config = hubConfig.GetRandomCharacterConfig();
             Entity entity = _factory.CreateEntityByType(config.entityType);
-            entity.Init(config.entityData);
+            EntityData entityData = new EntityData(config.entityData);
+            entity.Init(entityData, _skillsManager.GetSkillListBySkillConfigs(config.skillConfigList));
             return entity;
         }
 
