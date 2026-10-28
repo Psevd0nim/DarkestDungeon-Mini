@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 996cf8b26626cc54a8a034a4cf3c5bc4, type: 3}
+  m_Name: Squad Settings Config
+  m_EditorClassIdentifier: Assembly-CSharp::MyProject.SquadSettingsConfig
+  squadColors:
+  - colorType: 0
+    color: {r: 0.8490566, g: 0.254717, b: 0.254717, a: 1}
+  - colorType: 1
+    color: {r: 0.254902, g: 0.35424837, b: 0.8509804, a: 1}
+  - colorType: 2
+    color: {r: 0.30457518, g: 0.8509804, b: 0.254902, a: 1}
+  - colorType: 3
+    color: {r: 0.8509804, g: 0.8410458, b: 0.254902, a: 1}
