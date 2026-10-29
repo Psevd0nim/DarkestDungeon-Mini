@@ -4,21 +4,21 @@ using UnityEngine;
 
 namespace MyProject
 {
-    public class EntitiesManager : MonoBehaviour
+    public class CharactersManager : MonoBehaviour
     {
-        public event Action<Entity> OnCharacterPressed;
+        public event Action<Character> OnCharacterPressed;
 
-        public EntityHubConfig hubConfig;
+        public CharacterHubConfig hubConfig;
 
-        public SquadController PlayerSquadManager => _playerSquadController;
-        public SquadController EnemySquadManager => _enemySquadController;
+        public SquadController PlayerSquadController => _playerSquadController;
+        public SquadController EnemySquadController => _enemySquadController;
 
         [SerializeField] private SquadController _playerSquadController;
         [SerializeField] private SquadController _enemySquadController;
         [SerializeField] private SquadSettingsConfig _squadSettingsConfig;
 
         private Factory _factory;
-        private List<Entity> _allCharacters = new List<Entity>();
+        private List<Character> _allCharacters = new List<Character>();
         private SkillsManager _skillsManager;
 
         public void Init(Factory factory, Game_UI_Manager game_UI_Manager, SkillsManager skillsManager)
@@ -36,33 +36,26 @@ namespace MyProject
 
             _allCharacters.AddRange(_playerSquadController.Characters);
             _allCharacters.AddRange(_enemySquadController.Characters);
-
-            foreach (Entity entity in _allCharacters)
-            {
-                entity.OnPressed += AfterCharacterPressed;
-            }
         }
 
-        public Entity GetRandomCharacter()
+        public Character GetRandomCharacter()
         {
-            EntityConfig config = hubConfig.GetRandomCharacterConfig();
-            Entity entity = _factory.CreateEntityByType(config.entityType);
-            EntityData entityData = new EntityData(config.entityData);
-            entity.Init(entityData, _skillsManager.GetSkillListBySkillConfigs(config.skillConfigList));
-            return entity;
+            CharacterConfig config = hubConfig.GetRandomCharacterConfig();
+            Character character = _factory.CreateCharacterByType(config.characterType);
+            character.OnPressed += AfterCharacterPressed;
+            CharacterData characterData = new CharacterData(config.characterData);
+            character.Init(characterData, _skillsManager.GetSkillListBySkillConfigs(config.skillConfigList, character));
+            return character;
         }
 
-        public List<Entity> GetAliveCharacters()
+        public List<Character> GetAliveCharacters()
         {
             return _allCharacters.FindAll(character => character.IsAlive);
         }
 
-        private void AfterCharacterPressed(Entity entity)
+        private void AfterCharacterPressed(Character character)
         {
-
-            //OnCharacterPressed?.Invoke(entity);
+            OnCharacterPressed?.Invoke(character);
         }
-
-        
     }
 }

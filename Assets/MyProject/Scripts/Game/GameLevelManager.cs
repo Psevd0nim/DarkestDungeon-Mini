@@ -5,7 +5,7 @@ namespace MyProject
     public class GameLevelManager : LevelManager
     {
         [SerializeField] private FightManager _fightManager;
-        [SerializeField] private EntitiesManager _entitiesManager;
+        [SerializeField] private CharactersManager _charactersManager;
         [SerializeField] private Game_UI_Manager _gameUIManager;
         [SerializeField] private Factory _factory;
         [SerializeField] private SkillsManager _skillsManager;
@@ -16,18 +16,18 @@ namespace MyProject
         {
             _appServices = appServices;
 
-            _fightManager.Init(_entitiesManager, _gameUIManager, _skillsManager);
+            _fightManager.Init(_charactersManager, _gameUIManager, _skillsManager);
 
-            _entitiesManager.Init(_factory, _gameUIManager, _skillsManager);
+            _charactersManager.Init(_factory, _gameUIManager, _skillsManager);
 
             _gameUIManager.Init(_factory);
 
-            _skillsManager.Init(_gameUIManager);
+            _skillsManager.Init(_gameUIManager, _charactersManager);
         }
 
         public override void StartLevel()
         {
-            _entitiesManager.FillSquads();
+            _charactersManager.FillSquads();
             _fightManager.StartFight();
         }
     }

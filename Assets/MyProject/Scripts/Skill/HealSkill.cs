@@ -1,15 +1,24 @@
+using System;
+using System.Collections.Generic;
+
 namespace MyProject
 {
-    public class HealSkill : Skill
+    [Serializable]
+    public class HealSkill : Skill, ITargetedSkill
     {
-        public HealSkill(HealSkillConfig healSkillConfig)
+        public HealSkill(HealSkillConfig healSkillConfig) : base(healSkillConfig)
         {
             Config = healSkillConfig;
         }
 
-        public override void UseSkill(SkillsManager skillsManager)
+        public void Execute(Character target, Action onCompleted)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
+        }
+
+        public List<Character> GetAvailableTargets()
+        {
+            throw new NotImplementedException();
         }
     }
 }

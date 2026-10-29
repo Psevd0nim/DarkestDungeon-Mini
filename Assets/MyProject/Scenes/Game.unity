@@ -285,6 +285,7 @@ GameObject:
   - component: {fileID: 519420031}
   - component: {fileID: 519420029}
   - component: {fileID: 519420030}
+  - component: {fileID: 519420033}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -410,6 +411,22 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &519420033
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 519420028}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 56666c5a40171f54783dd416a44f42bf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.EventSystems.Physics2DRaycaster
+  m_EventMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_MaxRayIntersections: 0
 --- !u!4 &556276708 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7386718683123125504, guid: cf8939bc8dc7dd046bf8dccb3c079fea, type: 3}
@@ -602,7 +619,7 @@ MonoBehaviour:
   _swordsmanPrefab: {fileID: 8558013090060576990, guid: 51ec5fd274872184197996135d8779aa, type: 3}
   _healerPrefab: {fileID: 6144761824707280000, guid: 034737889df247f4191159cf34cd7a6e, type: 3}
   _skillUIPrefab: {fileID: 6457893751065725451, guid: 08373d986a982164f9bab1a3ec6a678b, type: 3}
-  _entity_UIPrefab: {fileID: 2903603649795978029, guid: 6833d7cc461aed447a0052eea5ffb40c, type: 3}
+  _character_UIPrefab: {fileID: 2903603649795978029, guid: 6833d7cc461aed447a0052eea5ffb40c, type: 3}
 --- !u!4 &675175883
 Transform:
   m_ObjectHideFlags: 0
@@ -648,7 +665,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MyProject.GameLevelManager
   _fightManager: {fileID: 1507527841}
-  _entitiesManager: {fileID: 1347316036}
+  _charactersManager: {fileID: 1347316036}
   _gameUIManager: {fileID: 603659079}
   _factory: {fileID: 675175882}
   _skillsManager: {fileID: 2098543561}
@@ -885,7 +902,7 @@ GameObject:
   - component: {fileID: 1347316037}
   - component: {fileID: 1347316036}
   m_Layer: 0
-  m_Name: EntitiesManager
+  m_Name: CharactersManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -902,7 +919,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 79d3bda07277d1a47ab24727a25e7931, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::MyProject.EntitiesManager
+  m_EditorClassIdentifier: Assembly-CSharp::MyProject.CharactersManager
   hubConfig: {fileID: 11400000, guid: fdb9b0baa7f135744982e94983c7b9d8, type: 2}
   _playerSquadController: {fileID: 1128047637}
   _enemySquadController: {fileID: 390995396}

@@ -1,15 +1,24 @@
+using System;
+using System.Collections.Generic;
+
 namespace MyProject
 {
-    public class RangedAttackSkill : Skill
+    [Serializable]
+    public class RangedAttackSkill : Skill, ITargetedSkill
     {
-        public RangedAttackSkill(RangedSkillConfig rangedSkillConfig)
+        public RangedAttackSkill(RangedSkillConfig rangedSkillConfig) : base(rangedSkillConfig)
         {
             Config = rangedSkillConfig;
         }
 
-        public override void UseSkill(SkillsManager skillsManager)
+        public void Execute(Character target, Action onCompleted)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
+        }
+
+        public List<Character> GetAvailableTargets()
+        {
+            throw new NotImplementedException();
         }
     }
 }

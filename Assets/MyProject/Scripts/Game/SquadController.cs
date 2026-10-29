@@ -1,25 +1,28 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace MyProject
 {
     public class SquadController : MonoBehaviour
     {
-        public List<Entity> Characters => _characters;
+        public List<Character> Characters => _characters;
         public ColorData SquadColor => _squadColor;
+        public Character FrontlineCharacter => _frontlineCharacter;
 
         [SerializeField] private List<Transform> _squadSlots;
         [SerializeField] private Transform _charactersParent;
 
-        private List<Entity> _characters = new List<Entity>();
+        private List<Character> _characters = new List<Character>();
 
-        private EntitiesManager _entitiesManager;
+        private CharactersManager _charactersManager;
         private bool _needReverse;
         private ColorData _squadColor;
+        private Character _frontlineCharacter;
 
-        public void Init(EntitiesManager entitiesManager, ColorData squadColor, bool needReverse = false)
+        public void Init(CharactersManager charactersManager, ColorData squadColor, bool needReverse = false)
         {
-            _entitiesManager = entitiesManager;
+            _charactersManager = charactersManager;
             _squadColor = squadColor;
             _needReverse = needReverse;
         }
@@ -28,12 +31,18 @@ namespace MyProject
         {
             for (int i = 0; i < _squadSlots.Count; i++)
             {
-                Entity entity = _entitiesManager.GetRandomCharacter();
-                entity.transform.SetParent(_charactersParent, false);
-                entity.transform.position = _squadSlots[i].position;
-                _characters.Add(entity);
-                entity.AdditionalInit(i + 1, _squadColor, _needReverse);
+                Character character = _charactersManager.GetRandomCharacter();
+                character.transform.SetParent(_charactersParent, false);
+                character.transform.position = _squadSlots[i].position;
+                _characters.Add(character);
+                character.AdditionalInit(this, i + 1, _squadColor, _needReverse);
             }
+            SetFrontlineCharacter();
+        }
+
+        private void SetFrontlineCharacter()
+        {
+            _frontlineCharacter = _characters.First(x => x.IsAlive);
         }
 
         public void FillSquadByFixedConfig()

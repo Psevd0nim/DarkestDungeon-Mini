@@ -20,12 +20,12 @@ namespace MyProject
             _skillsBoard_UI.Init(factory);
         }
 
-        public void ShowCharacterSequence(List<Entity> characters)
+        public void ShowCharacterSequence(List<Character> characters)
         {
             _charactersBoard_UI.ShowCharacterSequence(characters, _factory);
         }
 
-        public void SetCharacter_UI_Active(Entity currentCharacter, bool isActive)
+        public void SetCharacter_UI_Active(Character currentCharacter, bool isActive)
         {
             _charactersBoard_UI.SetCharacter_UI_Active(currentCharacter, isActive);
         }

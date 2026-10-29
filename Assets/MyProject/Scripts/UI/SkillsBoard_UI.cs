@@ -9,7 +9,7 @@ namespace MyProject
         public event Action<Skill_UI> OnSkillPressed;
 
         private Factory _factory;
-        private List<Skill_UI> _targetSkills = new List<Skill_UI>();
+        private List<Skill_UI> _targetSkillsUI = new List<Skill_UI>();
 
         public void Init(Factory factory)
         {
@@ -18,26 +18,31 @@ namespace MyProject
 
         public void ShowSkills(List<Skill> skills)
         {
-            TryClearSkills();
+            ClearBoard();
             foreach (var skill in skills)
-            {
-                Skill_UI skill_UI = _factory.CreateSkill_UI();
-                skill_UI.transform.SetParent(transform);
-                skill_UI.Init(skill);
-                _targetSkills.Add(skill_UI);
-                skill_UI.OnSkillPressed += AfterSkillPressed;
-            }
+                CreateSkill_UI(skill);
         }
 
-        public void TryClearSkills()
+        private void CreateSkill_UI(Skill skill)
         {
-            if (_targetSkills.Count > 0)
+            Skill_UI skill_UI = _factory.CreateSkill_UI();
+            skill_UI.transform.SetParent(transform);
+            skill_UI.Init(skill);
+            _targetSkillsUI.Add(skill_UI);
+            skill_UI.OnSkillPressed += AfterSkillPressed;
+            skill.SetSkillUI(skill_UI);
+        }
+
+        public void ClearBoard()
+        {
+            if (_targetSkillsUI.Count > 0)
             {
-                foreach (var skill in _targetSkills)
+                foreach (var skillUI in _targetSkillsUI)
                 {
-                    Destroy(skill.gameObject);
+                    skillUI.Skill.SetSkillUI(null);
+                    Destroy(skillUI.gameObject);
                 }
-                _targetSkills.Clear();
+                _targetSkillsUI.Clear();
             }
         }
 
@@ -45,5 +50,7 @@ namespace MyProject
         {
             OnSkillPressed?.Invoke(skill_UI);
         }
+
+        
     }
 }

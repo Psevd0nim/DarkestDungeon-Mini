@@ -1,15 +1,18 @@
+using System;
+
 namespace MyProject
 {
-    public class SkipTurnSkill : Skill
+    [Serializable]
+    public class SkipTurnSkill : Skill, IImmediateSkill
     {
-        public SkipTurnSkill(SkipTurnSkillConfig skipTurnSkillConfig)
+        public SkipTurnSkill(SkipTurnSkillConfig skipTurnSkillConfig) : base(skipTurnSkillConfig)
         {
             Config = skipTurnSkillConfig;
         }
 
-        public override void UseSkill(SkillsManager skillsManager)
+        public void Execute(Action onCompleted)
         {
-            throw new System.NotImplementedException();
+            onCompleted?.Invoke();
         }
     }
 }

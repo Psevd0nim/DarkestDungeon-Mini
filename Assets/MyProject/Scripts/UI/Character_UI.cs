@@ -5,14 +5,14 @@ using UnityEngine.UI;
 
 namespace MyProject
 {
-    public class Entity_UI : MonoBehaviour
+    public class Character_UI : MonoBehaviour
     {
-        public Entity Entity => _entity;
+        public Character Character => _character;
 
         [SerializeField] private Image _mainView;
         [SerializeField] private TextMeshProUGUI _squadNumText;
 
-        private Entity _entity;
+        private Character _character;
         private Vector3 _startScale;
 
         private void Awake()
@@ -20,9 +20,9 @@ namespace MyProject
             _startScale = transform.localScale;
         }
 
-        public void Init(Entity character)
+        public void Init(Character character)
         {
-            _entity = character;
+            _character = character;
             _mainView.color = character.ColorData.color;
             _squadNumText.text = character.SquadPosNum.ToString();
         }

@@ -11,9 +11,9 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f989c6f5d6a2e194baa96fce5861ba79, type: 3}
   m_Name: SwordsmanConfig
-  m_EditorClassIdentifier: Assembly-CSharp::MyProject.EntityConfig
-  entityType: 0
-  entityData:
+  m_EditorClassIdentifier: Assembly-CSharp::MyProject.CharacterConfig
+  characterType: 0
+  characterData:
     health: 12
     speed: 8
     attack: 10

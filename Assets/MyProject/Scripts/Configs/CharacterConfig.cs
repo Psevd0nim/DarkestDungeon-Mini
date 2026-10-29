@@ -4,10 +4,10 @@ using UnityEngine;
 namespace MyProject
 {
     [CreateAssetMenu]
-    public class EntityConfig : ScriptableObject
+    public class CharacterConfig : ScriptableObject
     {
-        public EntityType entityType;
-        public EntityData entityData;
+        public CharacterType characterType;
+        public CharacterData characterData;
         public List<SkillConfig> skillConfigList;
     }
 }

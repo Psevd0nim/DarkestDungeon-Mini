@@ -1,3 +1,4 @@
+using Sirenix.OdinInspector;
 using System;
 using TMPro;
 using UnityEngine;
@@ -6,7 +7,7 @@ using UnityEngine.UI;
 
 namespace MyProject
 {
-    public class Skill_UI : MonoBehaviour, IPointerClickHandler
+    public class Skill_UI : MonoBehaviour
     {
         public event Action<Skill_UI> OnSkillPressed;
 
@@ -16,6 +17,7 @@ namespace MyProject
         [SerializeField] private Outline _selectedOutline;
         [SerializeField] private TextMeshProUGUI _skillTipText;
         [SerializeField] private GameObject _tip;
+        [SerializeField] private CanvasGroup _viewCanvasGroup;
 
         private Skill _skill;
 
@@ -30,11 +32,7 @@ namespace MyProject
             _skill = skill;
             _skillView.sprite = skill.Config.sprite;
             _skillTipText.text = skill.Config.tip;
-        }
-
-        public void OnPointerClick(PointerEventData eventData)
-        {
-            SkillButtonPressed();
+            SetInteractableStatus(skill.CanUse);
         }
 
         public void SetSelectedActive(bool isActive)
@@ -47,9 +45,16 @@ namespace MyProject
             _tip.SetActive(show);
         }
 
-        private void SkillButtonPressed()
+        private void SetInteractableStatus(bool status)
         {
-            OnSkillPressed?.Invoke(this);
+            _viewCanvasGroup.interactable = status;
+            _viewCanvasGroup.alpha = status ? 1 : 0.7f;
+        }
+
+        public void SkillButtonPressed()
+        {
+            if(_skill.CanUse)
+                OnSkillPressed?.Invoke(this);
         }
     }
 }

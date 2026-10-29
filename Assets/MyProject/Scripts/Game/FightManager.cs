@@ -7,17 +7,17 @@ namespace MyProject
 {
     public class FightManager : MonoBehaviour
     {
-        private EntitiesManager _entitiesManager;
+        private CharactersManager _charactersManager;
         private Game_UI_Manager _game_UI_Manager;
         private SkillsManager _skillsManager;
 
         private bool _fightIsEnded;
-        private List<Entity> _queueList = new List<Entity>();
+        private List<Character> _queueList = new List<Character>();
         private int _currentCharacterIndex;
 
-        public void Init(EntitiesManager entitiesManager, Game_UI_Manager game_UI_Manager, SkillsManager skillsManager)
+        public void Init(CharactersManager charactersManager, Game_UI_Manager game_UI_Manager, SkillsManager skillsManager)
         {
-            _entitiesManager = entitiesManager;
+            _charactersManager = charactersManager;
             _game_UI_Manager = game_UI_Manager;
             _skillsManager = skillsManager;
         }
@@ -34,7 +34,7 @@ namespace MyProject
                 PrepareRound();
                 while(_currentCharacterIndex < _queueList.Count)
                 {
-                    Entity currentCharacter = _queueList[_currentCharacterIndex];
+                    Character currentCharacter = _queueList[_currentCharacterIndex];
                     yield return CharacterFight(currentCharacter);
                     _currentCharacterIndex++;
                 }
@@ -44,25 +44,25 @@ namespace MyProject
 
         private void PrepareRound()
         {
-            List<Entity> aliveCharacters = _entitiesManager.GetAliveCharacters();
+            List<Character> aliveCharacters = _charactersManager.GetAliveCharacters();
             _queueList = aliveCharacters.OrderByDescending(x => x.Speed).ToList();
             _game_UI_Manager.ShowCharacterSequence(_queueList);
         }
 
-        private IEnumerator CharacterFight(Entity currentCharacter)
+        private IEnumerator CharacterFight(Character currentCharacter)
         {
             currentCharacter.SetCharacterActive(true);
             _game_UI_Manager.SetCharacter_UI_Active(currentCharacter, true);
 
             bool playerTurnCompleted = false;
-            if (_entitiesManager.PlayerSquadManager.Characters.Contains(currentCharacter))
+            if (_charactersManager.PlayerSquadController.Characters.Contains(currentCharacter))
             {
                 _skillsManager.BeginPlayerTurn(currentCharacter, () => playerTurnCompleted = true);
                 yield return new WaitUntil(() => playerTurnCompleted);
             }
             else
             {
-                yield return new WaitForSeconds(3f);
+                yield return new WaitForSeconds(1f);
             }
 
             currentCharacter.SetCharacterActive(false);

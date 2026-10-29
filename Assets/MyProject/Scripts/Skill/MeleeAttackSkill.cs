@@ -1,20 +1,41 @@
+using System;
+using System.Collections.Generic;
+using Random = UnityEngine.Random;
+
 namespace MyProject
 {
-    public class MeleeAttackSkill : Skill
+    [Serializable]
+    public class MeleeAttackSkill : Skill, ITargetedSkill
     {
-        private float _minDamage;
-        private float _maxDamage;
+        public override bool CanUse => Owner.IsFrontliner;
 
-        public MeleeAttackSkill(float minDamage, float maxDamage, MeleeSkillConfig meleeSkillConfig)
+        private int _minDamage;
+        private int _maxDamage;
+
+        private SquadController _enemySquadController;
+
+        public MeleeAttackSkill(int minDamage, int maxDamage, MeleeSkillConfig meleeSkillConfig) : base (meleeSkillConfig)
         {
             _minDamage = minDamage;
             _maxDamage = maxDamage;
-            Config = meleeSkillConfig;
         }
 
-        public override void UseSkill(SkillsManager skillsManager)
+        public void Prepare(SquadController enemySquadController)
         {
-            throw new System.NotImplementedException();
+            _enemySquadController = enemySquadController;
+        }
+
+        public List<Character> GetAvailableTargets()
+        {
+            List<Character> targets = new List<Character>();
+            targets.Add(_enemySquadController.FrontlineCharacter);
+            return targets;
+        }
+
+        public void Execute(Character target, Action onCompleted)
+        {
+            target.TakeDamage(Random.Range(_minDamage, _maxDamage + 1));
+            onCompleted?.Invoke();
         }
     }
 }

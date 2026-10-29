@@ -5,8 +5,8 @@ namespace MyProject
     [CreateAssetMenu]
     public class MeleeSkillConfig : SkillConfig
     {
-        public float minDamage;
-        public float maxDamage;
+        public int minDamage;
+        public int maxDamage;
 
         public override Skill CreateSkill()
         {

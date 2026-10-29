@@ -1,6 +1,6 @@
 namespace MyProject
 {
-    public enum EntityType
+    public enum CharacterType
     {
         Swordsman, Archer, Healer
     }

@@ -261,7 +261,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 62612f7b625ddb94a9920d291cead1f9, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::MyProject.Entity_UI
+  m_EditorClassIdentifier: Assembly-CSharp::MyProject.Character_UI
   _mainView: {fileID: 5782430387792474709}
   _squadNumText: {fileID: 4514714885139118157}
 --- !u!1 &7759073279296860253

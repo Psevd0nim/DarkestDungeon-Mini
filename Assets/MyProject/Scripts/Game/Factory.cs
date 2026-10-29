@@ -5,29 +5,29 @@ namespace MyProject
 {
     public class Factory : MonoBehaviour
     {
-        [SerializeField] private Entity _archerPrefab;
-        [SerializeField] private Entity _swordsmanPrefab;
-        [SerializeField] private Entity _healerPrefab;
+        [SerializeField] private Character _archerPrefab;
+        [SerializeField] private Character _swordsmanPrefab;
+        [SerializeField] private Character _healerPrefab;
 
         [SerializeField] private Skill_UI _skillUIPrefab;
-        [SerializeField] private Entity_UI _entity_UIPrefab;
+        [SerializeField] private Character_UI _character_UIPrefab;
 
-        public Entity CreateEntityByType(EntityType type)
+        public Character CreateCharacterByType(CharacterType type)
         {
-            Entity entity = null;
+            Character character = null;
             switch (type)
             {
-                case EntityType.Swordsman:
-                    entity = Instantiate(_swordsmanPrefab);
+                case CharacterType.Swordsman:
+                    character = Instantiate(_swordsmanPrefab);
                     break;
-                case EntityType.Archer:
-                    entity = Instantiate(_archerPrefab);
+                case CharacterType.Archer:
+                    character = Instantiate(_archerPrefab);
                     break;
-                case EntityType.Healer:
-                    entity = Instantiate(_healerPrefab);
+                case CharacterType.Healer:
+                    character = Instantiate(_healerPrefab);
                     break;
             }
-            return entity;
+            return character;
         }
 
         public Skill_UI CreateSkill_UI()
@@ -35,9 +35,9 @@ namespace MyProject
             return Instantiate(_skillUIPrefab);
         }
 
-        public Entity_UI CreateEntity_UI()
+        public Character_UI CreateCharacter_UI()
         {
-            return Instantiate(_entity_UIPrefab);
+            return Instantiate(_character_UIPrefab);
         }
     }
 }
