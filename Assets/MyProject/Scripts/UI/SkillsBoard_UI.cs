@@ -50,7 +50,5 @@ namespace MyProject
         {
             OnSkillPressed?.Invoke(skill_UI);
         }
-
-        
     }
 }

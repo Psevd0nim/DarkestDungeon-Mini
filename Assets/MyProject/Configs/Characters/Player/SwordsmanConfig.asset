@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: SwordsmanConfig
   m_EditorClassIdentifier: Assembly-CSharp::MyProject.CharacterConfig
   characterType: 0
+  characterPrefab: {fileID: 8558013090060576990, guid: 51ec5fd274872184197996135d8779aa, type: 3}
   characterData:
     health: 12
     speed: 8

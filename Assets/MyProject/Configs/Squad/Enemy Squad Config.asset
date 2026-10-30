@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 70244b268b0f54c439c25b264e282edd, type: 3}
+  m_Name: Enemy Squad Config
+  m_EditorClassIdentifier: Assembly-CSharp::MyProject.SquadConfig
+  firstSquadSlot: {fileID: 11400000, guid: 3c207819c1e853444ba6a283139cc4a1, type: 2}
+  secondSquadSlot: {fileID: 11400000, guid: 3c207819c1e853444ba6a283139cc4a1, type: 2}
+  thirdSquadSlot: {fileID: 11400000, guid: 8c5ab0f18eae4ee42a9b64a59c54c8dc, type: 2}
+  fourthSquadSlot: {fileID: 11400000, guid: d7e81462168d8d148a52f04a78b212da, type: 2}

@@ -7,6 +7,7 @@ namespace MyProject
     public class CharacterConfig : ScriptableObject
     {
         public CharacterType characterType;
+        public Character characterPrefab;
         public CharacterData characterData;
         public List<SkillConfig> skillConfigList;
     }

@@ -65,7 +65,7 @@ namespace MyProject
                                 break;
                         }
                         List<Character> targetCharacterList = targetedSkill.GetAvailableTargets();
-                        ShowSkillTargets(targetCharacterList);
+                        ShowSkillTargets(targetCharacterList, true);
                         yield return new WaitForSeconds(2f);
                         foreach (Character target in targetCharacterList)
                             target.SetTargetActive(false);
@@ -80,7 +80,7 @@ namespace MyProject
         {
             List<Skill> skills = new List<Skill>();
             skills.Add(_requiredSkillConfig.CreateSkill());
-            foreach(var skillConfig in skillConfigList)
+            foreach (var skillConfig in skillConfigList)
             {
                 Skill skill = skillConfig.CreateSkill();
                 skill.SetCharacter(character);
@@ -92,7 +92,7 @@ namespace MyProject
         private void ShowSkills(List<Skill> skills)
         {
             _skillsBoard_UI.ShowSkills(skills);
-            foreach(var skill in skills)
+            foreach (var skill in skills)
             {
                 switch (skill)
                 {
@@ -122,29 +122,34 @@ namespace MyProject
                     immediateSkill.Execute(AfterSkillUsed);
                     break;
                 case ITargetedSkill targetedSkill:
-                    if(_currentActiveSkill != null)
-                    {
-                        if (_currentActiveSkill == targetedSkill)
-                            return;
-                        else
-                            _currentActiveSkill.Skill_UI.SetSelectedActive(false);
-                    }
-                    _currentActiveSkill = skill;
-                    _targetedSkill = targetedSkill;
-                    _currentActiveSkill.Skill_UI.SetSelectedActive(true);
-                    _targetCharacterList = targetedSkill.GetAvailableTargets();
-                    ShowSkillTargets(_targetCharacterList);
-                    _charactersManager.OnCharacterPressed += CheckForTargetAccept;
+                    if (_targetedSkill != null && _targetedSkill == targetedSkill)
+                        return;
+                    SetOrChangeTargetSkill(skill, targetedSkill);
                     break;
             }
         }
 
-        private void ShowSkillTargets(List<Character> targets)
+        private void ShowSkillTargets(List<Character> targets, bool show)
         {
             foreach (Character character in targets)
             {
-                character.SetTargetActive(true);
+                character.SetTargetActive(show);
             }
+        }
+
+        private void SetOrChangeTargetSkill(Skill skill, ITargetedSkill targetedSkill)
+        {
+            _charactersManager.OnCharacterPressed -= CheckForTargetAccept;
+            _currentActiveSkill?.Skill_UI.SetSelectedActive(false);
+            _currentActiveSkill = skill;
+            _currentActiveSkill.Skill_UI.SetSelectedActive(true);
+
+            ShowSkillTargets(_targetCharacterList, false);
+            _targetedSkill = targetedSkill;
+            _targetCharacterList = targetedSkill.GetAvailableTargets();
+            ShowSkillTargets(_targetCharacterList, true);
+
+            _charactersManager.OnCharacterPressed += CheckForTargetAccept;
         }
 
         private void CheckForTargetAccept(Character potentionalTarget)

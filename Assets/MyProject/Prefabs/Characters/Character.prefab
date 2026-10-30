@@ -491,7 +491,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 1.802}
+  m_AnchoredPosition: {x: -0.407, y: 2.149}
   m_SizeDelta: {x: 0.2961, y: 0.2961}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!23 &3140474335331292217
@@ -601,7 +601,7 @@ MonoBehaviour:
   m_VerticalAlignment: 512
   m_textAlignment: 65535
   m_characterSpacing: 0
-  m_characterHorizontalScale: 1
+  m_characterHorizontalScale: 2
   m_wordSpacing: 0
   m_lineSpacing: 0
   m_lineSpacingMax: 0
@@ -938,6 +938,7 @@ MonoBehaviour:
   _healthBar: {fileID: 4147316131011050409}
   _activeCharacterSign: {fileID: 6473834899511950697}
   _targetSign: {fileID: 7909410181462261479}
+  _animator: {fileID: 0}
 --- !u!212 &3344182994810302959
 SpriteRenderer:
   serializedVersion: 3

@@ -34,8 +34,12 @@ namespace MyProject
 
         public void Execute(Character target, Action onCompleted)
         {
+            Owner.PlaySomeAnim(CharacterAnimType.Attack);
             target.TakeDamage(Random.Range(_minDamage, _maxDamage + 1));
             onCompleted?.Invoke();
+
+
+
         }
     }
 }

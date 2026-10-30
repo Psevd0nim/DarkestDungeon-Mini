@@ -10,6 +10,7 @@ namespace MyProject
     public class Character : MonoBehaviour, IPointerClickHandler
     {
         public event Action<Character> OnPressed;
+        public event Action<Character> OnDeath;
 
         public int Health { get; private set; }
         public int Speed { get; private set; }
@@ -27,6 +28,7 @@ namespace MyProject
         [SerializeField] private HealthBar _healthBar;
         [SerializeField] private Arrow _activeCharacterSign;
         [SerializeField] private TargetSign _targetSign;
+        [SerializeField] private Animator _animator;
 
         private ColorData _colorData;
         private int _squadPosNum;
@@ -36,6 +38,8 @@ namespace MyProject
         private void Awake()
         {
             SetCharacterActive(false);
+            if(_animator != null)
+                _animator.SetBool("Alive", true);
         }
 
         public void Init(CharacterData characterData, List<Skill> skillList)
@@ -74,7 +78,9 @@ namespace MyProject
             if (Health < 0)
             {
                 Health = 0;
+                DeathRattle();
             }
+            PlaySomeAnim(CharacterAnimType.Hurt);
             _healthBar.UpdateHealthBar(Health, _maxHealth);
         }
 
@@ -98,9 +104,39 @@ namespace MyProject
             _targetSign.SetSignActive(isActive);
         }
 
+        public void PlaySomeAnim(CharacterAnimType characterAnimType)
+        {
+            if (_animator == null)
+                return;
+
+            switch (characterAnimType)
+            {
+                case CharacterAnimType.Attack:
+                    _animator.SetTrigger("Attack");
+                    break;
+                case CharacterAnimType.Hurt:
+                    _animator.SetTrigger("Hurt");
+                    break;
+                case CharacterAnimType.Dead:
+                    _animator.SetBool("Alive", false);
+                    break;
+            }
+        }
+
         public void OnPointerClick(PointerEventData eventData)
         {
             OnPressed?.Invoke(this);
         }
+
+        private void DeathRattle()
+        {
+            PlaySomeAnim(CharacterAnimType.Dead);
+            OnDeath?.Invoke(this);
+        }
+    }
+
+    public enum CharacterAnimType
+    {
+        Attack, Hurt, Dead
     }
 }

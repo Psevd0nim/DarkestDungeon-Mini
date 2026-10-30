@@ -272,7 +272,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: be7e74d35dfe64c4ea876823b3c0dbb6, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::SquadManager
+  m_EditorClassIdentifier: Assembly-CSharp::MyProject.SquadController
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -699,7 +699,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: be7e74d35dfe64c4ea876823b3c0dbb6, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::SquadManager
+  m_EditorClassIdentifier: Assembly-CSharp::MyProject.SquadController
 --- !u!1 &1136343248
 GameObject:
   m_ObjectHideFlags: 0
@@ -920,10 +920,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 79d3bda07277d1a47ab24727a25e7931, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MyProject.CharactersManager
-  hubConfig: {fileID: 11400000, guid: fdb9b0baa7f135744982e94983c7b9d8, type: 2}
+  _characterHubConfig: {fileID: 11400000, guid: fdb9b0baa7f135744982e94983c7b9d8, type: 2}
   _playerSquadController: {fileID: 1128047637}
   _enemySquadController: {fileID: 390995396}
   _squadSettingsConfig: {fileID: 11400000, guid: da0755ea7758aec49a7f2ed1d0961d79, type: 2}
+  _fillPlayerSquadByRandom: 0
+  _playerSquadConfig: {fileID: 11400000, guid: c1e0c39b266c8994196668bba55dbd35, type: 2}
+  _fillEnemySquadByRandom: 0
+  _enemySquadConfig: {fileID: 11400000, guid: 0172020f67c842b4bbf363191c31e91b, type: 2}
 --- !u!4 &1347316037
 Transform:
   m_ObjectHideFlags: 0

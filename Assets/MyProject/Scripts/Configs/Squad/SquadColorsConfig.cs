@@ -5,7 +5,7 @@ using UnityEngine;
 namespace MyProject
 {
     [CreateAssetMenu]
-    public class SquadSettingsConfig : ScriptableObject
+    public class SquadColorsConfig : ScriptableObject
     {
         public List<ColorData> squadColors;
 
