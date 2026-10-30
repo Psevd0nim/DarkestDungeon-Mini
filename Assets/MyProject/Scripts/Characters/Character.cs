@@ -30,7 +30,7 @@ namespace MyProject
 
         private ColorData _colorData;
         private int _squadPosNum;
-        private float _maxHealth;
+        private int _maxHealth;
         private SquadController _ownSquad;
 
         private void Awake()
@@ -74,6 +74,16 @@ namespace MyProject
             if (Health < 0)
             {
                 Health = 0;
+            }
+            _healthBar.UpdateHealthBar(Health, _maxHealth);
+        }
+
+        public void Heal(int value)
+        {
+            Health += value;
+            if(Health > _maxHealth)
+            {
+                Health = _maxHealth;
             }
             _healthBar.UpdateHealthBar(Health, _maxHealth);
         }

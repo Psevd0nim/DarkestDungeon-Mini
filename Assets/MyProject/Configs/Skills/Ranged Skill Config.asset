@@ -14,3 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MyProject.RangedSkillConfig
   sprite: {fileID: 21300000, guid: 9a7a36d7da97f004db08524e8562ca79, type: 3}
   tip: Ranged attack to any enemy
+  minDamage: 3
+  maxDamage: 5

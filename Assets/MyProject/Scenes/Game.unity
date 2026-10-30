@@ -1176,7 +1176,7 @@ GameObject:
   - component: {fileID: 2136846906}
   - component: {fileID: 2136846905}
   m_Layer: 5
-  m_Name: skillsBoard
+  m_Name: skillsBoard_UI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

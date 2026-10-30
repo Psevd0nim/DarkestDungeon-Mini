@@ -1,24 +1,37 @@
 using System;
 using System.Collections.Generic;
+using Random = UnityEngine.Random;
 
 namespace MyProject
 {
     [Serializable]
     public class RangedAttackSkill : Skill, ITargetedSkill
     {
-        public RangedAttackSkill(RangedSkillConfig rangedSkillConfig) : base(rangedSkillConfig)
+        private int _minDamage;
+        private int _maxDamage;
+
+        private SquadController _enemySquadController;
+
+        public RangedAttackSkill(int minDamage, int maxDamage, RangedSkillConfig rangedSkillConfig) : base(rangedSkillConfig)
         {
-            Config = rangedSkillConfig;
+            _minDamage = minDamage;
+            _maxDamage = maxDamage;
+        }
+
+        public void Prepare(SquadController enemySquadController)
+        {
+            _enemySquadController = enemySquadController;
         }
 
         public void Execute(Character target, Action onCompleted)
         {
-            throw new NotImplementedException();
+            target.TakeDamage(Random.Range(_minDamage, _maxDamage + 1));
+            onCompleted?.Invoke();
         }
 
         public List<Character> GetAvailableTargets()
         {
-            throw new NotImplementedException();
+            return _enemySquadController.Characters;
         }
     }
 }

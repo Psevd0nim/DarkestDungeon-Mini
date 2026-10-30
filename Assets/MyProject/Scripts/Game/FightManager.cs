@@ -38,7 +38,7 @@ namespace MyProject
                     yield return CharacterFight(currentCharacter);
                     _currentCharacterIndex++;
                 }
-                _currentCharacterIndex = 0;
+                AfterRound();
             }        
         }
 
@@ -49,20 +49,27 @@ namespace MyProject
             _game_UI_Manager.ShowCharacterSequence(_queueList);
         }
 
+        private void AfterRound()
+        {
+            _currentCharacterIndex = 0;
+            _game_UI_Manager.ClearCharacterSequence();
+        }
+
         private IEnumerator CharacterFight(Character currentCharacter)
         {
             currentCharacter.SetCharacterActive(true);
             _game_UI_Manager.SetCharacter_UI_Active(currentCharacter, true);
 
-            bool playerTurnCompleted = false;
+            bool characterTurnCompleted = false;
             if (_charactersManager.PlayerSquadController.Characters.Contains(currentCharacter))
             {
-                _skillsManager.BeginPlayerTurn(currentCharacter, () => playerTurnCompleted = true);
-                yield return new WaitUntil(() => playerTurnCompleted);
+                _skillsManager.BeginPlayerTurn(currentCharacter, () => characterTurnCompleted = true);
+                yield return new WaitUntil(() => characterTurnCompleted);
             }
             else
             {
-                yield return new WaitForSeconds(1f);
+                _skillsManager.Begin_AI_Turn(currentCharacter, () => characterTurnCompleted = true);
+                yield return new WaitUntil(() => characterTurnCompleted);
             }
 
             currentCharacter.SetCharacterActive(false);

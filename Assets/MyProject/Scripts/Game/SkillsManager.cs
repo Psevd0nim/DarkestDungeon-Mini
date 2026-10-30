@@ -1,7 +1,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace MyProject
 {
@@ -11,13 +13,12 @@ namespace MyProject
 
         private Game_UI_Manager _game_UI_Manager;
         private CharactersManager _charactersManager;
-        private List<Skill> _targetSkills;
         private SkillsBoard_UI _skillsBoard_UI;
 
         private Skill _currentActiveSkill;
         private ITargetedSkill _targetedSkill;
+        private List<Character> _targetCharacterList = new List<Character>();
         private Action _callbackForEndTurn;
-        private List<Character> _targetList = new List<Character>();
 
         public void Init(Game_UI_Manager game_UI_Manager, CharactersManager charactersManager)
         {
@@ -31,6 +32,48 @@ namespace MyProject
         {
             ShowSkills(currentCharacter.SkillList);
             _callbackForEndTurn = callback;
+        }
+
+        public void Begin_AI_Turn(Character character, Action callback)
+        {
+            StartCoroutine(AI_TurnCoroutine(character, callback));
+        }
+
+        private IEnumerator AI_TurnCoroutine(Character character, Action callback)
+        {
+            _callbackForEndTurn = callback;
+            List<Skill> skillCanUseList = character.SkillList.Where(x => x.CanUse).ToList();
+            Skill skillForUse = skillCanUseList[Random.Range(0, skillCanUseList.Count)];
+            switch (skillForUse)
+            {
+                case IImmediateSkill immediateSkill:
+                    yield return new WaitForSeconds(1f);
+                    immediateSkill.Execute(AfterSkillUsed);
+                    break;
+                case ITargetedSkill targetedSkill:
+                    {
+                        switch (targetedSkill)
+                        {
+                            case MeleeAttackSkill meleeAttackSkill:
+                                meleeAttackSkill.Prepare(_charactersManager.PlayerSquadController);
+                                break;
+                            case RangedAttackSkill rangedAttackSkill:
+                                rangedAttackSkill.Prepare(_charactersManager.PlayerSquadController);
+                                break;
+                            case HealSkill healSkill:
+                                healSkill.Prepare(_charactersManager.EnemySquadController);
+                                break;
+                        }
+                        List<Character> targetCharacterList = targetedSkill.GetAvailableTargets();
+                        ShowSkillTargets(targetCharacterList);
+                        yield return new WaitForSeconds(2f);
+                        foreach (Character target in targetCharacterList)
+                            target.SetTargetActive(false);
+                        Character rndCharacter = targetCharacterList[Random.Range(0, targetCharacterList.Count)];
+                        targetedSkill.Execute(rndCharacter, AfterSkillUsed);
+                    }
+                    break;
+            }
         }
 
         public List<Skill> GetSkillListBySkillConfigs(List<SkillConfig> skillConfigList, Character character)
@@ -48,16 +91,19 @@ namespace MyProject
 
         private void ShowSkills(List<Skill> skills)
         {
-            _targetSkills = skills;
-            _skillsBoard_UI.ShowSkills(_targetSkills);
-            foreach(var skill in _targetSkills)
+            _skillsBoard_UI.ShowSkills(skills);
+            foreach(var skill in skills)
             {
                 switch (skill)
                 {
                     case MeleeAttackSkill meleeAttackSkill:
                         meleeAttackSkill.Prepare(_charactersManager.EnemySquadController);
                         break;
-                    default: 
+                    case RangedAttackSkill rangedAttackSkill:
+                        rangedAttackSkill.Prepare(_charactersManager.EnemySquadController);
+                        break;
+                    case HealSkill healSkill:
+                        healSkill.Prepare(_charactersManager.PlayerSquadController);
                         break;
                 }
             }
@@ -73,8 +119,6 @@ namespace MyProject
             switch (skill)
             {
                 case IImmediateSkill immediateSkill:
-                    if (_currentActiveSkill != null)
-                        _currentActiveSkill = null;
                     immediateSkill.Execute(AfterSkillUsed);
                     break;
                 case ITargetedSkill targetedSkill:
@@ -88,8 +132,8 @@ namespace MyProject
                     _currentActiveSkill = skill;
                     _targetedSkill = targetedSkill;
                     _currentActiveSkill.Skill_UI.SetSelectedActive(true);
-                    _targetList = targetedSkill.GetAvailableTargets();
-                    ShowSkillTargets(_targetList);
+                    _targetCharacterList = targetedSkill.GetAvailableTargets();
+                    ShowSkillTargets(_targetCharacterList);
                     _charactersManager.OnCharacterPressed += CheckForTargetAccept;
                     break;
             }
@@ -105,17 +149,19 @@ namespace MyProject
 
         private void CheckForTargetAccept(Character potentionalTarget)
         {
-            if (!_targetList.Contains(potentionalTarget))
+            if (!_targetCharacterList.Contains(potentionalTarget))
                 return;
 
             _charactersManager.OnCharacterPressed -= CheckForTargetAccept;
-            foreach (Character character in _targetList)
+            foreach (Character character in _targetCharacterList)
                 character.SetTargetActive(false);
-            _targetedSkill.Execute(potentionalTarget, _callbackForEndTurn);
+            _targetedSkill.Execute(potentionalTarget, AfterSkillUsed);
         }
 
         private void AfterSkillUsed()
         {
+            _currentActiveSkill = null;
+            _targetedSkill = null;
             _skillsBoard_UI.ClearBoard();
             _callbackForEndTurn?.Invoke();
         }

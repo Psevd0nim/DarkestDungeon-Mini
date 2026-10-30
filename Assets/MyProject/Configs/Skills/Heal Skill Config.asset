@@ -14,3 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MyProject.HealSkillConfig
   sprite: {fileID: 21300000, guid: 198b278a2b742d145be75d0cce611981, type: 3}
   tip: Heal your teammate
+  minHealValue: 2
+  maxHealValue: 5

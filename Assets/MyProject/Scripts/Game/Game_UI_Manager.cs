@@ -25,6 +25,11 @@ namespace MyProject
             _charactersBoard_UI.ShowCharacterSequence(characters, _factory);
         }
 
+        public void ClearCharacterSequence()
+        {
+            _charactersBoard_UI.Clear();
+        }
+
         public void SetCharacter_UI_Active(Character currentCharacter, bool isActive)
         {
             _charactersBoard_UI.SetCharacter_UI_Active(currentCharacter, isActive);
