@@ -6,36 +6,33 @@ namespace MyProject
     [Serializable]
     public abstract class Skill
     {
-        public virtual bool CanUse => true;
+        public virtual bool CanUse => Owner.IsAlive;
+        public SkillConfig Config { get; protected set; }
+        public Character Owner { get; private set; }
 
-        public SkillConfig Config { get; private protected set; }
-        public Character Owner { get; private protected set; }
-        public Skill_UI Skill_UI { get; private protected set; }
+        protected SkillExecutionManager _skillExecutionManager;
 
-        public Skill(SkillConfig config)
+        protected Skill(SkillConfig config)
         {
             Config = config;
         }
 
-        public void SetSkillUI(Skill_UI skill_UI)
+        public void Init(Character owner, SkillExecutionManager skillExecutionManager)
         {
-            Skill_UI = skill_UI;
-        }
-
-        public void SetCharacter(Character character)
-        {
-            Owner = character;
+            Owner = owner;
+            _skillExecutionManager = skillExecutionManager;
         }
     }
 
     public interface ITargetedSkill
     {
-        public List<Character> GetAvailableTargets();
-        public void Execute(Character target, Action onCompleted);
+        List<Character> GetAvailableTargets();
+
+        void Execute(Character target, Action onCompleted);
     }
 
     public interface IImmediateSkill
     {
-        public void Execute(Action onCompleted);
+        void Execute(Action onCompleted);
     }
 }

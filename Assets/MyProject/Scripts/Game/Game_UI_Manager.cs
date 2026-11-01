@@ -1,38 +1,60 @@
-using System;
-using System.Collections.Generic;
+using TMPro;
+using UnityEngine.UI;
 using UnityEngine;
 
 namespace MyProject
 {
     public class Game_UI_Manager : MonoBehaviour
     {
-        public CharactersBoard_UI CharactersBoard_UI => _charactersBoard_UI;
-        public SkillsBoard_UI SkillsBoard_UI => _skillsBoard_UI;
+        public CharacterSequence_UI CharacterSequence_UI => _characterSequence_UI;
+        public SkillBoard_UI SkillBoard_UI => _skillBoard_UI;
 
-        [SerializeField] private SkillsBoard_UI _skillsBoard_UI;
-        [SerializeField] private CharactersBoard_UI _charactersBoard_UI;
+        [SerializeField] private SkillBoard_UI _skillBoard_UI;
+        [SerializeField] private CharacterSequence_UI _characterSequence_UI;
+        [SerializeField] private GameObject _gamePanel;
+        [SerializeField] private GameObject _pausePanel;
+        [SerializeField] private TextMeshProUGUI _characterInfo;
+        [SerializeField] private Button _resume;
+        [SerializeField] private Button _restart;
+        [SerializeField] private Button _leave;
 
-        private Factory _factory;
+        private FightManager _fightManager;
 
-        public void Init(Factory factory)
+        public void Init(Factory factory, FightManager fightManager)
         {
-            _factory = factory;
-            _skillsBoard_UI.Init(factory);
+            _fightManager = fightManager;
+            _skillBoard_UI.Init(factory);
+            _characterSequence_UI.Init(factory);
+            _resume.onClick.AddListener(_fightManager.Resume);
+            _restart.onClick.AddListener(_fightManager.RestartFight);
+            _leave.onClick.AddListener(_fightManager.LeaveBattle);
+            SetPaused(false);
         }
 
-        public void ShowCharacterSequence(List<Character> characters)
+        private void Update()
         {
-            _charactersBoard_UI.ShowCharacterSequence(characters, _factory);
+            if (UnityEngine.InputSystem.Keyboard.current == null)
+            {
+                return;
+            }
+
+            if (UnityEngine.InputSystem.Keyboard.current.escapeKey.wasPressedThisFrame)
+            {
+                _fightManager.TogglePause();
+            }
         }
 
-        public void ClearCharacterSequence()
+        public void ShowCharacter(Character character)
         {
-            _charactersBoard_UI.Clear();
+            _characterInfo.text = character.DisplayName
+                + "\nHP " + character.Health + "/" + character.MaxHealth
+                + "\nSpeed " + character.Speed + "\nAttack " + character.Attack + "\nDefense " + character.Defense;
         }
 
-        public void SetCharacter_UI_Active(Character currentCharacter, bool isActive)
+        public void SetPaused(bool paused)
         {
-            _charactersBoard_UI.SetCharacter_UI_Active(currentCharacter, isActive);
+            _gamePanel.SetActive(!paused);
+            _pausePanel.SetActive(paused);
         }
     }
 }

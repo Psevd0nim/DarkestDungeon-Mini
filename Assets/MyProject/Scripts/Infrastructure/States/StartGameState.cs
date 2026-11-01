@@ -17,7 +17,9 @@ namespace MyProject
         {
             _levelManager = UnityEngine.Object.FindAnyObjectByType<LevelManager>();
             if (_levelManager == null)
+            {
                 throw new Exception("The current scene must contain a LevelManager.");
+            }
 
             _levelManager.Init(_stateMachine.AppServices);
             _levelManager.OnExitLevel += ChangeScene;
@@ -33,6 +35,5 @@ namespace MyProject
         {
             _stateMachine.Enter<LoadLevelState, string>(sceneName);
         }
-
     }
 }

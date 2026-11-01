@@ -14,6 +14,8 @@ namespace MyProject
             _stateMachine.SetAppServices(new AppServices());
         }
 
-        public void Exit() { }
+        public void Exit()
+        {
+        }
     }
 }

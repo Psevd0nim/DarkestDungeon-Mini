@@ -1,45 +1,42 @@
 using System;
 using System.Collections.Generic;
-using Random = UnityEngine.Random;
+using UnityEngine;
 
 namespace MyProject
 {
     [Serializable]
     public class MeleeAttackSkill : Skill, ITargetedSkill
     {
-        public override bool CanUse => Owner.IsFrontliner;
-
         private int _minDamage;
         private int _maxDamage;
+        private SquadController _enemySquad;
+        public override bool CanUse => base.CanUse && Owner.IsFrontliner;
 
-        private SquadController _enemySquadController;
-
-        public MeleeAttackSkill(int minDamage, int maxDamage, MeleeSkillConfig meleeSkillConfig) : base (meleeSkillConfig)
+        public MeleeAttackSkill(int minDamage, int maxDamage, MeleeSkillConfig config) : base(config)
         {
             _minDamage = minDamage;
             _maxDamage = maxDamage;
         }
 
-        public void Prepare(SquadController enemySquadController)
+        public void Prepare(SquadController enemySquad)
         {
-            _enemySquadController = enemySquadController;
+            _enemySquad = enemySquad;
         }
 
         public List<Character> GetAvailableTargets()
         {
-            List<Character> targets = new List<Character>();
-            targets.Add(_enemySquadController.FrontlineCharacter);
+            var targets = new List<Character>();
+            if (CanUse && _enemySquad.FrontlineCharacter != null)
+            {
+                targets.Add(_enemySquad.FrontlineCharacter);
+            }
+
             return targets;
         }
 
         public void Execute(Character target, Action onCompleted)
         {
-            Owner.PlaySomeAnim(CharacterAnimType.Attack);
-            target.TakeDamage(Random.Range(_minDamage, _maxDamage + 1));
-            onCompleted?.Invoke();
-
-
-
+            _skillExecutionManager.Attack(Owner, target, UnityEngine.Random.Range(_minDamage, _maxDamage + 1), 0, Config, onCompleted);
         }
     }
 }

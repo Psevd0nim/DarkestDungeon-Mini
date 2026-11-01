@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f989c6f5d6a2e194baa96fce5861ba79, type: 3}
   m_Name: SwordsmanConfig
   m_EditorClassIdentifier: Assembly-CSharp::MyProject.CharacterConfig
+  displayName: Swordsman
+  portrait: {fileID: 21300000, guid: f38a5cd83c3a5d64a967fcbca947535f, type: 2}
   characterType: 0
   characterPrefab: {fileID: 8558013090060576990, guid: 51ec5fd274872184197996135d8779aa, type: 3}
   characterData:

@@ -9,12 +9,16 @@ namespace MyProject
         public CharacterConfig secondSquadSlot;
         public CharacterConfig thirdSquadSlot;
         public CharacterConfig fourthSquadSlot;
+        public Color squadColor;
 
         public CharacterConfig[] GetSquadFormation()
         {
             CharacterConfig[] squadFormation = new CharacterConfig[]
             {
-                firstSquadSlot, secondSquadSlot, thirdSquadSlot, fourthSquadSlot,
+                firstSquadSlot,
+                secondSquadSlot,
+                thirdSquadSlot,
+                fourthSquadSlot,
             };
             return squadFormation;
         }

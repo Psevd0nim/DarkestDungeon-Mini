@@ -12,5 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef2565ba2fd7f044494233f178811c58, type: 3}
   m_Name: Skip Turn Skill Config
   m_EditorClassIdentifier: Assembly-CSharp::MyProject.SkipTurnSkillConfig
+  displayName: Wait
   sprite: {fileID: 21300000, guid: 1b291bbade53a5345ba1746c4d0f5ccc, type: 3}
-  tip: Skip your turn
+  tip: 'Pass this turn.
+
+    No target required.'
+  impactTime: 0.5

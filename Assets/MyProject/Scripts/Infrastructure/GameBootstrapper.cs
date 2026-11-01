@@ -4,8 +4,9 @@ namespace MyProject
 {
     public class GameBootstrapper : MonoBehaviour
     {
+#if UNITY_EDITOR
         [SerializeField] private bool _startWithCurrentScene = true;
-
+#endif
         private static GameBootstrapper _instance;
         private GameStateMachine _stateMachine;
 
@@ -19,7 +20,6 @@ namespace MyProject
 
             _instance = this;
             DontDestroyOnLoad(gameObject);
-
             _stateMachine = new GameStateMachine();
             _stateMachine.Enter<BootstrapState>();
         }
@@ -29,7 +29,10 @@ namespace MyProject
             string sceneName = Constants.StartSceneName;
 #if UNITY_EDITOR
             if (_startWithCurrentScene)
+            {
                 sceneName = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
+            }
+
 #endif
             _stateMachine.Enter<LoadLevelState, string>(sceneName);
         }

@@ -12,7 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f989c6f5d6a2e194baa96fce5861ba79, type: 3}
   m_Name: ArcherConfig
   m_EditorClassIdentifier: Assembly-CSharp::MyProject.CharacterConfig
+  displayName: Archer
+  portrait: {fileID: 21300000, guid: 3db2df5d0668df449a45763a3b1c53b8, type: 2}
   characterType: 1
+  characterPrefab: {fileID: 3782894302096839027, guid: 8de5df28493451a40ab59ffce2177f81, type: 3}
   characterData:
     health: 8
     speed: 10

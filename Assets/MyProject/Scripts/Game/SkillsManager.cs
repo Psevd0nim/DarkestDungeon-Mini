@@ -1,174 +1,248 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
-using Random = UnityEngine.Random;
 
 namespace MyProject
 {
     public class SkillsManager : MonoBehaviour
     {
         [SerializeField] private SkipTurnSkillConfig _requiredSkillConfig;
-
-        private Game_UI_Manager _game_UI_Manager;
         private CharactersManager _charactersManager;
-        private SkillsBoard_UI _skillsBoard_UI;
-
-        private Skill _currentActiveSkill;
+        private SkillBoard_UI _skillBoard_UI;
+        private SkillExecutionManager _skillExecutionManager;
+        private Action _onTurnCompleted;
+        private Skill _selectedSkill;
         private ITargetedSkill _targetedSkill;
-        private List<Character> _targetCharacterList = new List<Character>();
-        private Action _callbackForEndTurn;
+        private List<Character> _targets = new List<Character>();
+        private Coroutine _aiRoutine;
+        private bool _acceptPlayerInput;
+        public bool IsPaused { get; set; }
+        public bool IsExecuting => _skillExecutionManager.IsExecuting;
 
-        public void Init(Game_UI_Manager game_UI_Manager, CharactersManager charactersManager)
+        public void Init(Game_UI_Manager gameUIManager, CharactersManager charactersManager, SkillExecutionManager skillExecutionManager)
         {
-            _game_UI_Manager = game_UI_Manager;
             _charactersManager = charactersManager;
-            _skillsBoard_UI = _game_UI_Manager.SkillsBoard_UI;
-            _skillsBoard_UI.OnSkillPressed += AfterSkillPressed;
+            _skillExecutionManager = skillExecutionManager;
+            _skillBoard_UI = gameUIManager.SkillBoard_UI;
+            _skillBoard_UI.OnSkillPressed += AfterSkillPressed;
         }
 
-        public void BeginPlayerTurn(Character currentCharacter, Action callback)
+        public List<Skill> GetSkillListBySkillConfigs(List<SkillConfig> configs, Character owner)
         {
-            ShowSkills(currentCharacter.SkillList);
-            _callbackForEndTurn = callback;
-        }
-
-        public void Begin_AI_Turn(Character character, Action callback)
-        {
-            StartCoroutine(AI_TurnCoroutine(character, callback));
-        }
-
-        private IEnumerator AI_TurnCoroutine(Character character, Action callback)
-        {
-            _callbackForEndTurn = callback;
-            List<Skill> skillCanUseList = character.SkillList.Where(x => x.CanUse).ToList();
-            Skill skillForUse = skillCanUseList[Random.Range(0, skillCanUseList.Count)];
-            switch (skillForUse)
+            var skills = new List<Skill>
             {
-                case IImmediateSkill immediateSkill:
-                    yield return new WaitForSeconds(1f);
-                    immediateSkill.Execute(AfterSkillUsed);
-                    break;
-                case ITargetedSkill targetedSkill:
-                    {
-                        switch (targetedSkill)
-                        {
-                            case MeleeAttackSkill meleeAttackSkill:
-                                meleeAttackSkill.Prepare(_charactersManager.PlayerSquadController);
-                                break;
-                            case RangedAttackSkill rangedAttackSkill:
-                                rangedAttackSkill.Prepare(_charactersManager.PlayerSquadController);
-                                break;
-                            case HealSkill healSkill:
-                                healSkill.Prepare(_charactersManager.EnemySquadController);
-                                break;
-                        }
-                        List<Character> targetCharacterList = targetedSkill.GetAvailableTargets();
-                        ShowSkillTargets(targetCharacterList, true);
-                        yield return new WaitForSeconds(2f);
-                        foreach (Character target in targetCharacterList)
-                            target.SetTargetActive(false);
-                        Character rndCharacter = targetCharacterList[Random.Range(0, targetCharacterList.Count)];
-                        targetedSkill.Execute(rndCharacter, AfterSkillUsed);
-                    }
-                    break;
-            }
-        }
-
-        public List<Skill> GetSkillListBySkillConfigs(List<SkillConfig> skillConfigList, Character character)
-        {
-            List<Skill> skills = new List<Skill>();
-            skills.Add(_requiredSkillConfig.CreateSkill());
-            foreach (var skillConfig in skillConfigList)
+                _requiredSkillConfig.CreateSkill()
+            };
+            foreach (var config in configs)
             {
-                Skill skill = skillConfig.CreateSkill();
-                skill.SetCharacter(character);
-                skills.Add(skill);
+                skills.Add(config.CreateSkill());
             }
+
+            foreach (var skill in skills)
+            {
+                skill.Init(owner, _skillExecutionManager);
+            }
+
             return skills;
         }
 
-        private void ShowSkills(List<Skill> skills)
+        private void PrepareSkills(Character character)
         {
-            _skillsBoard_UI.ShowSkills(skills);
-            foreach (var skill in skills)
+            foreach (var skill in character.SkillList)
             {
                 switch (skill)
                 {
-                    case MeleeAttackSkill meleeAttackSkill:
-                        meleeAttackSkill.Prepare(_charactersManager.EnemySquadController);
+                    case MeleeAttackSkill melee:
+                        melee.Prepare(_charactersManager.GetOpponent(character));
                         break;
-                    case RangedAttackSkill rangedAttackSkill:
-                        rangedAttackSkill.Prepare(_charactersManager.EnemySquadController);
+                    case RangedAttackSkill ranged:
+                        ranged.Prepare(_charactersManager.GetOpponent(character));
                         break;
-                    case HealSkill healSkill:
-                        healSkill.Prepare(_charactersManager.PlayerSquadController);
+                    case HealSkill heal:
+                        heal.Prepare(character.OwnSquad);
                         break;
                 }
             }
         }
 
-        private void AfterSkillPressed(Skill_UI skill_UI)
+        public void BeginPlayerTurn(Character character, Action completed)
         {
-            BeginUseSkill(skill_UI.Skill);
+            CancelSelection();
+            _onTurnCompleted = completed;
+            PrepareSkills(character);
+            _acceptPlayerInput = true;
+            _skillBoard_UI.ShowSkills(character.SkillList);
         }
 
-        private void BeginUseSkill(Skill skill)
+        private void AfterSkillPressed(Skill_UI button)
         {
-            switch (skill)
+            if (!_acceptPlayerInput || IsPaused || _skillExecutionManager.IsExecuting || !button.Skill.CanUse)
             {
-                case IImmediateSkill immediateSkill:
-                    immediateSkill.Execute(AfterSkillUsed);
-                    break;
-                case ITargetedSkill targetedSkill:
-                    if (_targetedSkill != null && _targetedSkill == targetedSkill)
-                        return;
-                    SetOrChangeTargetSkill(skill, targetedSkill);
-                    break;
-            }
-        }
-
-        private void ShowSkillTargets(List<Character> targets, bool show)
-        {
-            foreach (Character character in targets)
-            {
-                character.SetTargetActive(show);
-            }
-        }
-
-        private void SetOrChangeTargetSkill(Skill skill, ITargetedSkill targetedSkill)
-        {
-            _charactersManager.OnCharacterPressed -= CheckForTargetAccept;
-            _currentActiveSkill?.Skill_UI.SetSelectedActive(false);
-            _currentActiveSkill = skill;
-            _currentActiveSkill.Skill_UI.SetSelectedActive(true);
-
-            ShowSkillTargets(_targetCharacterList, false);
-            _targetedSkill = targetedSkill;
-            _targetCharacterList = targetedSkill.GetAvailableTargets();
-            ShowSkillTargets(_targetCharacterList, true);
-
-            _charactersManager.OnCharacterPressed += CheckForTargetAccept;
-        }
-
-        private void CheckForTargetAccept(Character potentionalTarget)
-        {
-            if (!_targetCharacterList.Contains(potentionalTarget))
                 return;
+            }
 
-            _charactersManager.OnCharacterPressed -= CheckForTargetAccept;
-            foreach (Character character in _targetCharacterList)
-                character.SetTargetActive(false);
-            _targetedSkill.Execute(potentionalTarget, AfterSkillUsed);
+            if (_selectedSkill == button.Skill)
+            {
+                return;
+            }
+
+            CancelSelection();
+            _selectedSkill = button.Skill;
+            button.SetSelectedActive(true);
+            switch (_selectedSkill)
+            {
+                case IImmediateSkill immediate:
+                    _acceptPlayerInput = false;
+                    _skillBoard_UI.SetInteractable(false);
+                    immediate.Execute(AfterSkillUsed);
+                    break;
+                case ITargetedSkill targeted:
+                    _targetedSkill = targeted;
+                    _targets = targeted.GetAvailableTargets();
+                    foreach (var target in _targets)
+                    {
+                        target.SetTargetActive(true);
+                    }
+
+                    _charactersManager.OnCharacterPressed += AfterTargetPressed;
+                    break;
+            }
+        }
+
+        private void AfterTargetPressed(Character character)
+        {
+            if (IsPaused || !_acceptPlayerInput || !_targets.Contains(character) || !character.IsAlive)
+            {
+                return;
+            }
+
+            var skill = _targetedSkill;
+            if (!skill.GetAvailableTargets().Contains(character))
+            {
+                return;
+            }
+
+            CancelSelection();
+            _acceptPlayerInput = false;
+            _skillBoard_UI.SetInteractable(false);
+            skill.Execute(character, AfterSkillUsed);
+        }
+
+        public void CancelSelection()
+        {
+            _charactersManager.OnCharacterPressed -= AfterTargetPressed;
+            foreach (var target in _targets)
+            {
+                if (target != null)
+                {
+                    target.SetTargetActive(false);
+                }
+            }
+
+            _targets.Clear();
+            _skillBoard_UI.ClearSelection();
+            _selectedSkill = null;
+            _targetedSkill = null;
+        }
+
+        public void Begin_AI_Turn(Character character, Action completed)
+        {
+            _onTurnCompleted = completed;
+            _acceptPlayerInput = false;
+            PrepareSkills(character);
+            _skillBoard_UI.ClearBoard();
+            _aiRoutine = StartCoroutine(AITurn(character));
+        }
+
+        private IEnumerator AITurn(Character character)
+        {
+            yield return new WaitForSeconds(0.55f);
+            var available = new List<Skill>();
+            foreach (var skill in character.SkillList)
+            {
+                if (!skill.CanUse || skill is SkipTurnSkill)
+                {
+                    continue;
+                }
+
+                if (skill is ITargetedSkill targeted)
+                {
+                    var targets = targeted.GetAvailableTargets();
+                    if (skill is HealSkill)
+                    {
+                        targets.RemoveAll(target => target.Health == target.MaxHealth);
+                    }
+
+                    if (targets.Count == 0)
+                    {
+                        continue;
+                    }
+                }
+
+                available.Add(skill);
+            }
+
+            // Passing is the fallback when no useful action is available.
+            if (available.Count == 0)
+            {
+                available.Add(character.SkillList.Find(skill => skill is SkipTurnSkill));
+            }
+
+            Skill chosen = available[UnityEngine.Random.Range(0, available.Count)];
+            _aiRoutine = null;
+            switch (chosen)
+            {
+                case IImmediateSkill immediate:
+                    immediate.Execute(AfterSkillUsed);
+                    break;
+                case ITargetedSkill targeted:
+                    var targets = targeted.GetAvailableTargets();
+                    if (chosen is HealSkill)
+                    {
+                        targets.RemoveAll(target => target.Health == target.MaxHealth);
+                    }
+
+                    targeted.Execute(targets[UnityEngine.Random.Range(0, targets.Count)], AfterSkillUsed);
+                    break;
+            }
         }
 
         private void AfterSkillUsed()
         {
-            _currentActiveSkill = null;
-            _targetedSkill = null;
-            _skillsBoard_UI.ClearBoard();
-            _callbackForEndTurn?.Invoke();
+            CancelSelection();
+            _skillBoard_UI.ClearBoard();
+            var completed = _onTurnCompleted;
+            _onTurnCompleted = null;
+            completed?.Invoke();
+        }
+
+        public void CancelTurn()
+        {
+            if (_aiRoutine != null)
+            {
+                StopCoroutine(_aiRoutine);
+            }
+
+            _aiRoutine = null;
+            _acceptPlayerInput = false;
+            _onTurnCompleted = null;
+            CancelSelection();
+            _skillBoard_UI.ClearBoard();
+            _skillExecutionManager.Cancel();
+        }
+
+        private void OnDestroy()
+        {
+            if (_skillBoard_UI != null)
+            {
+                _skillBoard_UI.OnSkillPressed -= AfterSkillPressed;
+            }
+
+            if (_charactersManager != null)
+            {
+                _charactersManager.OnCharacterPressed -= AfterTargetPressed;
+            }
         }
     }
 }

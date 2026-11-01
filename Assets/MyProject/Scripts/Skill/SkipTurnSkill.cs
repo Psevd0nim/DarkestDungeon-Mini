@@ -5,14 +5,13 @@ namespace MyProject
     [Serializable]
     public class SkipTurnSkill : Skill, IImmediateSkill
     {
-        public SkipTurnSkill(SkipTurnSkillConfig skipTurnSkillConfig) : base(skipTurnSkillConfig)
+        public SkipTurnSkill(SkipTurnSkillConfig config) : base(config)
         {
-            Config = skipTurnSkillConfig;
         }
 
         public void Execute(Action onCompleted)
         {
-            onCompleted?.Invoke();
+            _skillExecutionManager.Skip(Owner, Config, onCompleted);
         }
     }
 }

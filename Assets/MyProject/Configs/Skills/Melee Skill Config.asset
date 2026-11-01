@@ -12,7 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ab3dbeb5cecd00f438505ac35a0d4577, type: 3}
   m_Name: Melee Skill Config
   m_EditorClassIdentifier: Assembly-CSharp::MyProject.MeleeSkillConfig
+  displayName: Slash
   sprite: {fileID: 21300000, guid: 62262e6c1c3a1504f8a28a9efcb74f4f, type: 3}
-  tip: Melee attack to frotline enemy, but if you is frontline character
+  tip: Strike the foremost living enemy.
+  impactTime: 0.6
   minDamage: 3
   maxDamage: 6

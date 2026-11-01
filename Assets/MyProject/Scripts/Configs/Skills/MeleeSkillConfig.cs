@@ -12,5 +12,10 @@ namespace MyProject
         {
             return new MeleeAttackSkill(minDamage, maxDamage, this);
         }
+
+        public override string GetDescription()
+        {
+            return tip + "\nDamage: " + minDamage + "-" + maxDamage + ".\nFront position only.";
+        }
     }
 }

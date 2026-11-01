@@ -25,17 +25,20 @@ namespace MyProject
             AppServices = appServices;
         }
 
-        public void Enter<TState>() where TState : class, IDefaultState
+        public void Enter<TState>()
+            where TState : class, IDefaultState
         {
             ChangeState<TState>().Enter();
         }
 
-        public void Enter<TState, TPayload>(TPayload payload) where TState : class, IPayloadedState<TPayload>
+        public void Enter<TState, TPayload>(TPayload payload)
+            where TState : class, IPayloadedState<TPayload>
         {
             ChangeState<TState>().Enter(payload);
         }
 
-        private TState ChangeState<TState>() where TState : class, IState
+        private TState ChangeState<TState>()
+            where TState : class, IState
         {
             TState nextState = (TState)_states[typeof(TState)];
             _activeState?.Exit();

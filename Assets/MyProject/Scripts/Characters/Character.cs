@@ -1,4 +1,3 @@
-using Sirenix.OdinInspector;
 using System;
 using System.Collections.Generic;
 using TMPro;
@@ -13,130 +12,126 @@ namespace MyProject
         public event Action<Character> OnDeath;
 
         public int Health { get; private set; }
+        public int MaxHealth { get; private set; }
         public int Speed { get; private set; }
         public int Attack { get; private set; }
         public int Defense { get; private set; }
         public List<Skill> SkillList { get; private set; } = new List<Skill>();
-
         public bool IsAlive => Health > 0;
-        public ColorData ColorData => _colorData;
-        public int SquadPosNum => _squadPosNum;
-        public bool IsFrontliner => _ownSquad.FrontlineCharacter == this;
+        public Color Color => _colorData;
+        public int SquadPosNum { get; private set; }
+        public SquadController OwnSquad { get; private set; }
+        public bool IsFrontliner => OwnSquad.FrontlineCharacter == this;
+        public CharacterView Visual => _visual;
+        public string DisplayName { get; private set; }
+        public Sprite Portrait { get; private set; }
 
-        [SerializeField] private SpriteRenderer _view;
-        [SerializeField] private TextMeshPro _squadPosNumText;
         [SerializeField] private HealthBar _healthBar;
         [SerializeField] private Arrow _activeCharacterSign;
-        [SerializeField] private TargetSign _targetSign;
-        [SerializeField] private Animator _animator;
+        [SerializeField] private CharacterView _visual;
 
-        private ColorData _colorData;
-        private int _squadPosNum;
-        private int _maxHealth;
-        private SquadController _ownSquad;
+        private Color _colorData;
+        private SquadSlot _squadSlot;
 
         private void Awake()
         {
             SetCharacterActive(false);
-            if(_animator != null)
-                _animator.SetBool("Alive", true);
         }
 
-        public void Init(CharacterData characterData, List<Skill> skillList)
+        public void Init(CharacterData data, List<Skill> skills)
         {
-            Health = characterData.health;
-            _maxHealth = characterData.health;
-            Speed = characterData.speed;
-            Attack = characterData.attack;
-            Defense = characterData.defense;
-            SkillList = skillList;
-            _healthBar.UpdateHealthBar(Health, _maxHealth);
+            Health = MaxHealth = data.health;
+            Speed = data.speed;
+            Attack = data.attack;
+            Defense = data.defense;
+            SkillList = skills;
+            _healthBar.UpdateHealthBar(Health, MaxHealth);
         }
 
-        public void AdditionalInit(SquadController squadController, int squadPosNum, ColorData colorData, bool needReverse = false)
+        public void SetIdentity(CharacterConfig config)
         {
-            _ownSquad = squadController;
-            _squadPosNum = squadPosNum;
-            _squadPosNumText.text = squadPosNum.ToString();
+            DisplayName = string.IsNullOrEmpty(config.displayName) ? config.characterType.ToString() : config.displayName;
+            Portrait = config.portrait;
+        }
 
-            _colorData = colorData;
-            _view.color = colorData.color;
-
-            if (needReverse)
+        public void AdditionalInit(SquadController squad, int slot, Color color, bool reversed = false)
+        {
+            OwnSquad = squad;
+            SquadPosNum = slot;
+            _colorData = color;
+            if (reversed)
             {
-                Vector3 scale = _squadPosNumText.transform.localScale;
-                scale.x = -scale.x;
-                _squadPosNumText.transform.localScale = scale;
-
                 _healthBar.ReverseHealthBar();
+                _visual.ReverseFeedback();
             }
         }
 
-        public void TakeDamage(int damageValue)
+        public void SetSquadSlot(SquadSlot squadSlot)
         {
-            Health -= damageValue;
-            if (Health < 0)
+            _squadSlot = squadSlot;
+        }
+
+        public void TakeDamage(int damage)
+        {
+            if (!IsAlive)
             {
-                Health = 0;
-                DeathRattle();
-            }
-            PlaySomeAnim(CharacterAnimType.Hurt);
-            _healthBar.UpdateHealthBar(Health, _maxHealth);
-        }
-
-        public void Heal(int value)
-        {
-            Health += value;
-            if(Health > _maxHealth)
-            {
-                Health = _maxHealth;
-            }
-            _healthBar.UpdateHealthBar(Health, _maxHealth);
-        }
-
-        public void SetCharacterActive(bool isActive)
-        {
-            _activeCharacterSign.gameObject.SetActive(isActive);
-        }
-
-        public void SetTargetActive(bool isActive)
-        {
-            _targetSign.SetSignActive(isActive);
-        }
-
-        public void PlaySomeAnim(CharacterAnimType characterAnimType)
-        {
-            if (_animator == null)
                 return;
+            }
 
-            switch (characterAnimType)
+            Health = Mathf.Max(0, Health - damage);
+            _healthBar.UpdateHealthBar(Health, MaxHealth);
+            _visual.ShowFeedback("-" + damage, new Color(1, 0.45f, 0.35f));
+            if (Health == 0)
             {
-                case CharacterAnimType.Attack:
-                    _animator.SetTrigger("Attack");
-                    break;
-                case CharacterAnimType.Hurt:
-                    _animator.SetTrigger("Hurt");
-                    break;
-                case CharacterAnimType.Dead:
-                    _animator.SetBool("Alive", false);
-                    break;
+                Die();
+            }
+            else
+            {
+                _visual.PlayHurt();
             }
         }
 
-        public void OnPointerClick(PointerEventData eventData)
+        private void Die()
         {
-            OnPressed?.Invoke(this);
+            SetCharacterActive(false);
+            SetTargetActive(false);
+            OnDeath?.Invoke(this);
         }
 
         private void DeathRattle()
         {
-            PlaySomeAnim(CharacterAnimType.Dead);
-            OnDeath?.Invoke(this);
+            _visual.PlayDeath();
         }
-    }
 
-    public enum CharacterAnimType
-    {
-        Attack, Hurt, Dead
+        public void Heal(int value)
+        {
+            if (!IsAlive)
+            {
+                return;
+            }
+
+            int restored = Mathf.Min(value, MaxHealth - Health);
+            Health += restored;
+            _healthBar.UpdateHealthBar(Health, MaxHealth);
+            _visual.ShowFeedback("+" + restored, new Color(0.4f, 1, 0.65f));
+        }
+
+        public void SetCharacterActive(bool active)
+        {
+            _activeCharacterSign.gameObject.SetActive(active);
+        }
+
+        public void SetTargetActive(bool active)
+        {
+            _squadSlot.SetTargetActive(active);
+        }
+
+        public void OnPointerClick(PointerEventData data)
+        {
+            if (data.button == PointerEventData.InputButton.Left && IsAlive)
+            {
+                OnPressed?.Invoke(this);
+            }
+        }
     }
 }

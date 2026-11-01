@@ -7,6 +7,7 @@ namespace MyProject
     public class CharactersManager : MonoBehaviour
     {
         public event Action<Character> OnCharacterPressed;
+        public event Action<Character> OnCharacterDied;
 
         public SquadController PlayerSquadController => _playerSquadController;
         public SquadController EnemySquadController => _enemySquadController;
@@ -14,70 +15,117 @@ namespace MyProject
         [SerializeField] private CharacterHubConfig _characterHubConfig;
         [SerializeField] private SquadController _playerSquadController;
         [SerializeField] private SquadController _enemySquadController;
-        [SerializeField] private SquadColorsConfig _squadSettingsConfig;
-        [SerializeField] bool _fillPlayerSquadByRandom;
+        [SerializeField] private bool _fillPlayerSquadByRandom;
         [SerializeField] private SquadConfig _playerSquadConfig;
         [SerializeField] private bool _fillEnemySquadByRandom;
         [SerializeField] private SquadConfig _enemySquadConfig;
 
-        private Factory _factory;
-        private List<Character> _allCharacters = new List<Character>();
         private SkillsManager _skillsManager;
 
-        public void Init(Factory factory, Game_UI_Manager game_UI_Manager, SkillsManager skillsManager)
+        public void Init(Factory factory, Game_UI_Manager gameUIManager, SkillsManager skillsManager)
         {
-            _factory = factory;
             _skillsManager = skillsManager;
-            _playerSquadController.Init(this, _squadSettingsConfig.GetRandomColor());
-            _enemySquadController.Init(this, _squadSettingsConfig.GetRandomColorWithException(_playerSquadController.SquadColor.colorType), needReverse: true);
+            _playerSquadController.Init(this, _playerSquadConfig.squadColor);
+            _enemySquadController.Init(this, _enemySquadConfig.squadColor, reversed: true);
         }
 
-        public void FillSquads()
+        public void FillPlayerSquad()
         {
-            if(_playerSquadConfig == null || _fillPlayerSquadByRandom)
-                _playerSquadController.FillSquadByRandom();
-            else
-                _playerSquadController.FillSquadByFixedConfig(_playerSquadConfig);
-
-            if (_enemySquadConfig == null || _fillEnemySquadByRandom)
-                _enemySquadController.FillSquadByRandom();
-            else
-                _enemySquadController.FillSquadByFixedConfig(_enemySquadConfig);
-
-            _allCharacters.AddRange(_playerSquadController.Characters);
-            _allCharacters.AddRange(_enemySquadController.Characters);
+            CharacterConfig[] _currentFormationData = ChooseFormation(_playerSquadConfig, _fillPlayerSquadByRandom);
+            _playerSquadController.FillFormation(_currentFormationData);
         }
+
+        public void FillEnemySquad()
+        {
+            CharacterConfig[] _currentFormationData = ChooseFormation(_enemySquadConfig, _fillEnemySquadByRandom);
+            _enemySquadController.FillFormation(_currentFormationData);
+        }
+
+        public void FillSquadByFormation(SquadController squadController, CharacterConfig[] formation)
+        {
+            squadController.FillFormation(formation);
+        }
+
+        public CharacterConfig GetRandomConfig()
+        {
+            return _characterHubConfig.GetRandomCharacterConfig();
+        }
+
+        private CharacterConfig[] ChooseFormation(SquadConfig config, bool random)
+        {
+            if (!random && config != null)
+            {
+                return config.GetSquadFormation();
+            }
+
+            var result = new CharacterConfig[4];
+            for (int i = 0; i < result.Length; i++)
+            {
+                result[i] = GetRandomConfig();
+            }
+
+            return result;
+        }
+
+        
+
+        
+
+        
 
         public Character GetCharacterByConfig(CharacterConfig config)
         {
-            return CreateCharacter(config);
-        }
-
-        public Character GetRandomCharacter()
-        {
-            CharacterConfig config = _characterHubConfig.GetRandomCharacterConfig();
-            Character character = CreateCharacter(config);
-            return character;
-        }
-
-        private Character CreateCharacter(CharacterConfig config)
-        {
-            // TODO: Remove the factory fallback once all configs have a prefab assigned.
-            Character character = config.characterPrefab != null? Instantiate(config.characterPrefab) : _factory.CreateCharacterByType(config.characterType);
+            var character = Instantiate(config.characterPrefab);
             character.OnPressed += AfterCharacterPressed;
-            CharacterData characterData = new CharacterData(config.characterData);
-            character.Init(characterData, _skillsManager.GetSkillListBySkillConfigs(config.skillConfigList, character));
+            character.OnDeath += AfterCharacterDied;
+            character.Init(new CharacterData(config.characterData), _skillsManager.GetSkillListBySkillConfigs(config.skillConfigList, character));
+            character.SetIdentity(config);
             return character;
         }
 
         public List<Character> GetAliveCharacters()
         {
-            return _allCharacters.FindAll(character => character.IsAlive);
+            var result = _playerSquadController.GetAliveCharacters();
+            result.AddRange(_enemySquadController.GetAliveCharacters());
+            return result;
         }
 
-        private void AfterCharacterPressed(Character character)
+        public bool IsPlayer(Character c)
         {
-            OnCharacterPressed?.Invoke(character);
+            return c.OwnSquad == _playerSquadController;
+        }
+
+        public SquadController GetOpponent(Character c)
+        {
+            return IsPlayer(c) ? _enemySquadController : _playerSquadController;
+        }
+
+        public void ForEachCharacter(Action<Character> action)
+        {
+            foreach (var c in _playerSquadController.Characters)
+            {
+                action(c);
+            }
+
+            foreach (var c in _enemySquadController.Characters)
+            {
+                action(c);
+            }
+        }
+
+        public void LeaveBattle()
+        {
+            _enemySquadController.Clear();
+        }
+
+        private void AfterCharacterPressed(Character c)
+        {
+            OnCharacterPressed?.Invoke(c);
+        }
+
+        private void AfterCharacterDied(Character character)
+        {
+            OnCharacterDied?.Invoke(character);
         }
     }
 }

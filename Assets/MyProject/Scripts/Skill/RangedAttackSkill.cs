@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Random = UnityEngine.Random;
 
 namespace MyProject
 {
@@ -9,29 +8,30 @@ namespace MyProject
     {
         private int _minDamage;
         private int _maxDamage;
+        private SquadController _enemySquad;
+        private RangedSkillConfig _config;
 
-        private SquadController _enemySquadController;
-
-        public RangedAttackSkill(int minDamage, int maxDamage, RangedSkillConfig rangedSkillConfig) : base(rangedSkillConfig)
+        public RangedAttackSkill(int minDamage, int maxDamage, RangedSkillConfig config) : base(config)
         {
             _minDamage = minDamage;
             _maxDamage = maxDamage;
+            _config = config;
         }
 
-        public void Prepare(SquadController enemySquadController)
+        public void Prepare(SquadController enemySquad)
         {
-            _enemySquadController = enemySquadController;
-        }
-
-        public void Execute(Character target, Action onCompleted)
-        {
-            target.TakeDamage(Random.Range(_minDamage, _maxDamage + 1));
-            onCompleted?.Invoke();
+            _enemySquad = enemySquad;
         }
 
         public List<Character> GetAvailableTargets()
         {
-            return _enemySquadController.Characters;
+            return _enemySquad.GetAliveCharacters();
+        }
+
+        public void Execute(Character target, Action onCompleted)
+        {
+            int penalty = Owner.IsFrontliner ? _config.frontlineAttackPenalty : 0;
+            _skillExecutionManager.Attack(Owner, target, UnityEngine.Random.Range(_minDamage, _maxDamage + 1), penalty, Config, onCompleted);
         }
     }
 }

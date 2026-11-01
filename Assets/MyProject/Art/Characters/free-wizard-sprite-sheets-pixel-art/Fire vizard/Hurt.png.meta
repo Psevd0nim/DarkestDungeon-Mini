@@ -30,7 +30,7 @@ TextureImporter:
     heightScale: 0.25
     normalMapFilter: 0
     flipGreenChannel: 0
-  isReadable: 0
+  isReadable: 1
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
   vTOnly: 0
@@ -43,7 +43,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 1
+    filterMode: 0
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -57,7 +57,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 100
+  spritePixelsToUnits: 40
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -80,10 +80,10 @@ TextureImporter:
   platformSettings:
   - serializedVersion: 4
     buildTarget: DefaultTexturePlatform
-    maxTextureSize: 2048
+    maxTextureSize: 4096
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 1
+    textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -124,19 +124,19 @@ TextureImporter:
       name: Hurt_0
       rect:
         serializedVersion: 2
-        x: 33
+        x: 0
         y: 0
-        width: 32
-        height: 52
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.33, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 6437b001e623193e0800000000000000
+      spriteID: 28daaaedebd03e846b75d46bfb99accb
       internalID: -2048800907179887802
       vertices: []
       indices: 
@@ -146,19 +146,19 @@ TextureImporter:
       name: Hurt_1
       rect:
         serializedVersion: 2
-        x: 159
+        x: 128
         y: 0
-        width: 34
-        height: 53
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.33, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 3476ad19262dfc600800000000000000
+      spriteID: 2f8ed39688df2ef43b64c99077ce654e
       internalID: 490842205202310979
       vertices: []
       indices: 
@@ -168,19 +168,19 @@ TextureImporter:
       name: Hurt_2
       rect:
         serializedVersion: 2
-        x: 289
+        x: 256
         y: 0
-        width: 32
-        height: 52
-      alignment: 0
-      pivot: {x: 0, y: 0}
+        width: 128
+        height: 128
+      alignment: 9
+      pivot: {x: 0.33, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 1f6b92202d6bf5cc0800000000000000
+      spriteID: 6844a17eda8b4f14ea5a33e8164fca2f
       internalID: -3720053754089064719
       vertices: []
       indices: 
@@ -190,7 +190,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: f25466d38b2e1ec439f500ba4627db73
     internalID: 0
     vertices: []
     indices: 

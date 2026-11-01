@@ -14,5 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MyProject.SquadConfig
   firstSquadSlot: {fileID: 11400000, guid: f8edc0f80d6568d4ebafdc3894ef3b1e, type: 2}
   secondSquadSlot: {fileID: 11400000, guid: 8c5ab0f18eae4ee42a9b64a59c54c8dc, type: 2}
-  thirdSquadSlot: {fileID: 0}
-  fourthSquadSlot: {fileID: 11400000, guid: d7e81462168d8d148a52f04a78b212da, type: 2}
+  thirdSquadSlot: {fileID: 11400000, guid: d7e81462168d8d148a52f04a78b212da, type: 2}
+  fourthSquadSlot: {fileID: 11400000, guid: f8edc0f80d6568d4ebafdc3894ef3b1e, type: 2}
+  squadColor: {r: 0, g: 0.8, b: 0.2, a: 1}

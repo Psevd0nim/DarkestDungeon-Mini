@@ -12,7 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 445a8b3783f01ce43870e2494329b152, type: 3}
   m_Name: Ranged Skill Config
   m_EditorClassIdentifier: Assembly-CSharp::MyProject.RangedSkillConfig
+  displayName: Shoot
   sprite: {fileID: 21300000, guid: 9a7a36d7da97f004db08524e8562ca79, type: 3}
-  tip: Ranged attack to any enemy
+  tip: Choose any living enemy.
+  impactTime: 0.65
   minDamage: 3
   maxDamage: 5
+  frontlineAttackPenalty: 15
