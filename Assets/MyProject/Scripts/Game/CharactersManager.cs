@@ -46,11 +46,6 @@ namespace MyProject
             squadController.FillFormation(formation);
         }
 
-        public CharacterConfig GetRandomConfig()
-        {
-            return _characterHubConfig.GetRandomCharacterConfig();
-        }
-
         private CharacterConfig[] ChooseFormation(SquadConfig config, bool random)
         {
             if (!random && config != null)
@@ -58,20 +53,14 @@ namespace MyProject
                 return config.GetSquadFormation();
             }
 
-            var result = new CharacterConfig[4];
+            CharacterConfig[] result = new CharacterConfig[4];
             for (int i = 0; i < result.Length; i++)
             {
-                result[i] = GetRandomConfig();
+                result[i] = _characterHubConfig.GetRandomCharacterConfig();
             }
 
             return result;
         }
-
-        
-
-        
-
-        
 
         public Character GetCharacterByConfig(CharacterConfig config)
         {
@@ -85,42 +74,29 @@ namespace MyProject
 
         public List<Character> GetAliveCharacters()
         {
-            var result = _playerSquadController.GetAliveCharacters();
+            List<Character> result = _playerSquadController.GetAliveCharacters();
             result.AddRange(_enemySquadController.GetAliveCharacters());
             return result;
         }
 
-        public bool IsPlayer(Character c)
+        public bool IsPlayer(Character character)
         {
-            return c.OwnSquad == _playerSquadController;
+            return character.OwnSquad == _playerSquadController;
         }
 
-        public SquadController GetOpponent(Character c)
+        public SquadController GetOpponentSquad(Character character)
         {
-            return IsPlayer(c) ? _enemySquadController : _playerSquadController;
+            return IsPlayer(character) ? _enemySquadController : _playerSquadController;
         }
 
-        public void ForEachCharacter(Action<Character> action)
-        {
-            foreach (var c in _playerSquadController.Characters)
-            {
-                action(c);
-            }
-
-            foreach (var c in _enemySquadController.Characters)
-            {
-                action(c);
-            }
-        }
-
-        public void LeaveBattle()
+        public void ClearEnemySquad()
         {
             _enemySquadController.Clear();
         }
 
-        private void AfterCharacterPressed(Character c)
+        private void AfterCharacterPressed(Character character)
         {
-            OnCharacterPressed?.Invoke(c);
+            OnCharacterPressed?.Invoke(character);
         }
 
         private void AfterCharacterDied(Character character)

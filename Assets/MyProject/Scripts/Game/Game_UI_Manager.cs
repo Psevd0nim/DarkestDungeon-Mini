@@ -25,7 +25,7 @@ namespace MyProject
             _fightManager = fightManager;
             _skillBoard_UI.Init(factory);
             _characterSequence_UI.Init(factory);
-            _resume.onClick.AddListener(_fightManager.Resume);
+            //_resume.onClick.AddListener(_fightManager.Resume);
             _restart.onClick.AddListener(_fightManager.RestartFight);
             _leave.onClick.AddListener(_fightManager.LeaveBattle);
             SetPaused(false);
@@ -40,7 +40,7 @@ namespace MyProject
 
             if (UnityEngine.InputSystem.Keyboard.current.escapeKey.wasPressedThisFrame)
             {
-                _fightManager.TogglePause();
+                //_fightManager.TogglePause();
             }
         }
 

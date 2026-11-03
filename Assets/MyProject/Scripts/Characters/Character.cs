@@ -91,6 +91,11 @@ namespace MyProject
             }
         }
 
+        public void ShowFeedback(string text, Color color)
+        {
+            _visual.ShowFeedback(text, color);
+        }
+
         private void Die()
         {
             SetCharacterActive(false);

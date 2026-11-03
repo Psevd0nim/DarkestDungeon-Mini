@@ -25,24 +25,9 @@ namespace MyProject
             _needReverse = reversed;
         }
 
-        public void FillSquadByFixedConfig(SquadConfig config)
-        {
-            FillFormation(config.GetSquadFormation());
-        }
-
-        public void FillSquadByRandom()
-        {
-            var formation = new CharacterConfig[_squadSlots.Length];
-            for (int i = 0; i < formation.Length; i++)
-            {
-                formation[i] = _charactersManager.GetRandomConfig();
-            }
-
-            FillFormation(formation);
-        }
-
         public void FillFormation(CharacterConfig[] formation)
         {
+            Clear();
             _initialFormationData = formation;
             for (int i = 0; i < _squadSlots.Length; i++)
             {
@@ -63,24 +48,6 @@ namespace MyProject
             }
 
             RefreshFrontline();
-        }
-
-        private void AfterDeath(Character character)
-        {
-            RefreshFrontline();
-        }
-
-        private void RefreshFrontline()
-        {
-            FrontlineCharacter = null;
-            foreach (var slot in _squadSlots)
-            {
-                if (slot.CharacterInSlot != null && slot.CharacterInSlot.IsAlive)
-                {
-                    FrontlineCharacter = slot.CharacterInSlot;
-                    break;
-                }
-            }
         }
 
         public List<Character> GetAliveCharacters()
@@ -104,6 +71,24 @@ namespace MyProject
             }
 
             FrontlineCharacter = null;
+        }
+
+        private void AfterDeath(Character character)
+        {
+            RefreshFrontline();
+        }
+
+        private void RefreshFrontline()
+        {
+            FrontlineCharacter = null;
+            foreach (var slot in _squadSlots)
+            {
+                if (slot.CharacterInSlot != null && slot.CharacterInSlot.IsAlive)
+                {
+                    FrontlineCharacter = slot.CharacterInSlot;
+                    break;
+                }
+            }
         }
     }
 }

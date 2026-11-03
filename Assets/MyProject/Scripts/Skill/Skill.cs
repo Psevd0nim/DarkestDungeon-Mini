@@ -10,17 +10,17 @@ namespace MyProject
         public SkillConfig Config { get; protected set; }
         public Character Owner { get; private set; }
 
-        protected SkillExecutionManager _skillExecutionManager;
+        private protected ICoroutineRunner _coroutineRunner;
 
         protected Skill(SkillConfig config)
         {
             Config = config;
         }
 
-        public void Init(Character owner, SkillExecutionManager skillExecutionManager)
+        public void Init(Character owner, ICoroutineRunner coroutineRunner)
         {
             Owner = owner;
-            _skillExecutionManager = skillExecutionManager;
+            _coroutineRunner = coroutineRunner;
         }
     }
 
@@ -28,7 +28,7 @@ namespace MyProject
     {
         List<Character> GetAvailableTargets();
 
-        void Execute(Character target, Action onCompleted);
+        void Execute(Action onCompleted);
     }
 
     public interface IImmediateSkill

@@ -1,21 +1,33 @@
+using DG.Tweening;
 using UnityEngine;
 
 namespace MyProject
 {
     public class Arrow : MonoBehaviour
     {
-        private Vector3 _startPosition;
-        private float _elapsed;
+        private Sequence _arrowSequence;
 
         private void Awake()
         {
-            _startPosition = transform.localPosition;
+            _arrowSequence = DOTween.Sequence()
+                .Append(transform.DOLocalMoveY(0.5f, 1f).SetRelative(true).SetEase(Ease.InOutSine))
+                .Append(transform.DOLocalMoveY(-0.5f, 1f).SetRelative(true).SetEase(Ease.InOutSine))
+                .SetLoops(-1);
         }
 
-        private void Update()
+        private void OnEnable()
         {
-            _elapsed += Time.deltaTime;
-            transform.localPosition = _startPosition + Vector3.up * (Mathf.Sin(_elapsed * 4) * 0.08f);
+            _arrowSequence.Play();
+        }
+
+        private void OnDisable()
+        {
+            _arrowSequence.Pause();
+        }
+
+        private void OnDestroy()
+        {
+            _arrowSequence.Kill();
         }
     }
 }

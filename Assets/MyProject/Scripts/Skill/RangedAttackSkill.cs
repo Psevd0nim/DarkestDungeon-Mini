@@ -28,10 +28,11 @@ namespace MyProject
             return _enemySquad.GetAliveCharacters();
         }
 
-        public void Execute(Character target, Action onCompleted)
+        public void Execute(Action onCompleted)
         {
-            int penalty = Owner.IsFrontliner ? _config.frontlineAttackPenalty : 0;
-            _skillExecutionManager.Attack(Owner, target, UnityEngine.Random.Range(_minDamage, _maxDamage + 1), penalty, Config, onCompleted);
+            /*int penalty = Owner.IsFrontliner ? _config.frontlineAttackPenalty : 0;
+            _skillExecutionManager.Attack(Owner, target, UnityEngine.Random.Range(_minDamage, _maxDamage + 1), penalty, Config, onCompleted);*/
+            onCompleted?.Invoke();
         }
     }
 }

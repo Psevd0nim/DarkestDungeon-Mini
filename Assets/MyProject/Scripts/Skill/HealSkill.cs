@@ -28,9 +28,9 @@ namespace MyProject
             return _ownSquad.GetAliveCharacters();
         }
 
-        public void Execute(Character target, Action onCompleted)
+        public void Execute(Action onCompleted)
         {
-            List<Character> recipients = new List<Character>();
+            /*List<Character> recipients = new List<Character>();
             switch (_config.targetMode)
             {
                 case HealTargetMode.SelectedAlly:
@@ -51,7 +51,8 @@ namespace MyProject
                     break;
             }
 
-            _skillExecutionManager.Heal(Owner, recipients, UnityEngine.Random.Range(_minHealValue, _maxHealValue + 1), Config, onCompleted);
+            _skillExecutionManager.Heal(Owner, recipients, UnityEngine.Random.Range(_minHealValue, _maxHealValue + 1), Config, onCompleted);*/
+            onCompleted?.Invoke();
         }
     }
 }

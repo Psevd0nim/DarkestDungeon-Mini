@@ -34,9 +34,10 @@ namespace MyProject
             return targets;
         }
 
-        public void Execute(Character target, Action onCompleted)
+        public void Execute(Action onCompleted)
         {
-            _skillExecutionManager.Attack(Owner, target, UnityEngine.Random.Range(_minDamage, _maxDamage + 1), 0, Config, onCompleted);
+            //_skillExecutionManager.Attack(Owner, target, UnityEngine.Random.Range(_minDamage, _maxDamage + 1), 0, Config, onCompleted);
+
         }
     }
 }
