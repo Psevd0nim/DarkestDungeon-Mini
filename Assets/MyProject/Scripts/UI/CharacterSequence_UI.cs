@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -16,7 +16,7 @@ namespace MyProject
 
         public void ShowCharacterSequence(List<Character> characters)
         {
-            foreach (var character in characters)
+            foreach (Character character in characters)
             {
                 Character_UI character_UI = _factory.CreateCharacter_UI();
                 character_UI.transform.SetParent(transform, false);
@@ -49,7 +49,7 @@ namespace MyProject
 
         public void Clear()
         {
-            foreach (var character_UI in _charactersInSequence)
+            foreach (Character_UI character_UI in _charactersInSequence)
             {
                 character_UI.gameObject.SetActive(false);
                 Destroy(character_UI.gameObject);

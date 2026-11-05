@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace MyProject
 {
@@ -7,10 +8,12 @@ namespace MyProject
     public abstract class Skill
     {
         public virtual bool CanUse => Owner.IsAlive;
+
         public SkillConfig Config { get; protected set; }
         public Character Owner { get; private set; }
 
         private protected ICoroutineRunner _coroutineRunner;
+        private protected Coroutine _skillExecuteCoroutine;
 
         protected Skill(SkillConfig config)
         {
@@ -22,17 +25,12 @@ namespace MyProject
             Owner = owner;
             _coroutineRunner = coroutineRunner;
         }
-    }
 
-    public interface ITargetedSkill
-    {
-        List<Character> GetAvailableTargets();
+        public abstract void Execute(Action onCompleted);
 
-        void Execute(Action onCompleted);
-    }
-
-    public interface IImmediateSkill
-    {
-        void Execute(Action onCompleted);
+        public virtual void StopExecute()
+        {
+            _coroutineRunner.StopCoroutine(_skillExecuteCoroutine);
+        }
     }
 }

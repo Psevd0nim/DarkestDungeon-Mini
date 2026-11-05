@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -64,11 +64,10 @@ namespace MyProject
 
         public Character GetCharacterByConfig(CharacterConfig config)
         {
-            var character = Instantiate(config.characterPrefab);
+            Character character = Instantiate(config.characterPrefab);
             character.OnPressed += AfterCharacterPressed;
             character.OnDeath += AfterCharacterDied;
-            character.Init(new CharacterData(config.characterData), _skillsManager.GetSkillListBySkillConfigs(config.skillConfigList, character));
-            character.SetIdentity(config);
+            character.Init(config, _skillsManager.GetSkillListBySkillConfigs(config.skillConfigList, character));
             return character;
         }
 

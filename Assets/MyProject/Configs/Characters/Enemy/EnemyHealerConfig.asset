@@ -15,7 +15,7 @@ MonoBehaviour:
   displayName: Pyromancer
   portrait: {fileID: 21300000, guid: 6dee561ff10297b46b2608fea04c0398, type: 2}
   characterType: 2
-  characterPrefab: {fileID: 2210466252925117975, guid: b1e13470e66d5db42a06015e1234f9c2, type: 3}
+  characterPrefab: {fileID: 127278038041213044, guid: b1e13470e66d5db42a06015e1234f9c2, type: 3}
   characterData:
     health: 10
     speed: 6

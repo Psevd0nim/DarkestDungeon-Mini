@@ -27,7 +27,7 @@ AnimationClip:
     - time: 0.2
       value: {fileID: 490842205202310979, guid: 956a2b5c16b7b3645968e3f573e91a43, type: 3}
     attribute: m_Sprite
-    path: body
+    path: view/body
     classID: 212
     script: {fileID: 0}
     flags: 2
@@ -39,7 +39,7 @@ AnimationClip:
   m_ClipBindingConstant:
     genericBindings:
     - serializedVersion: 2
-      path: 3685223346
+      path: 3703580449
       attribute: 0
       script: {fileID: 0}
       typeID: 212
@@ -76,4 +76,11 @@ AnimationClip:
   m_EulerEditorCurves: []
   m_HasGenericRootTransform: 0
   m_HasMotionFloatCurves: 0
-  m_Events: []
+  m_Events:
+  - time: 0.3
+    functionName: HurtCompleted
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0

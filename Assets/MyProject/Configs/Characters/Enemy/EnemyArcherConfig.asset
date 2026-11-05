@@ -15,7 +15,7 @@ MonoBehaviour:
   displayName: Crimson Archer
   portrait: {fileID: 21300000, guid: 40fee63b3c34f1b4ab895ee4033fa41d, type: 2}
   characterType: 1
-  characterPrefab: {fileID: 5795910064075308293, guid: c81f2cb42d694564a9e30e1e2271c505, type: 3}
+  characterPrefab: {fileID: 3332420271410466453, guid: c81f2cb42d694564a9e30e1e2271c505, type: 3}
   characterData:
     health: 8
     speed: 10

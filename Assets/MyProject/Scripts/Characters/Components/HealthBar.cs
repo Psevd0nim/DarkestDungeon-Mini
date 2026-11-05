@@ -1,4 +1,4 @@
-using TMPro;
+﻿using TMPro;
 using UnityEngine;
 
 namespace MyProject
@@ -7,6 +7,7 @@ namespace MyProject
     {
         [SerializeField] private SpriteRenderer _healthBarView;
         [SerializeField] private TextMeshPro _healthText;
+
         private Vector3 _fullScale;
         private Vector3 _fullPosition;
         private float _width;
@@ -22,7 +23,7 @@ namespace MyProject
         {
             _healthText.text = currentValue + " / " + maxValue;
             float fraction = Mathf.Clamp01(currentValue / maxValue);
-            var scale = _fullScale;
+            Vector3 scale = _fullScale;
             scale.x *= fraction;
             _healthBarView.transform.localScale = scale;
             _healthBarView.transform.localPosition = _fullPosition - Vector3.right * (_width * (1 - fraction) * 0.5f);
@@ -30,7 +31,7 @@ namespace MyProject
 
         public void ReverseHealthBar()
         {
-            var scale = transform.localScale;
+            Vector3 scale = transform.localScale;
             scale.x = -scale.x;
             transform.localScale = scale;
         }

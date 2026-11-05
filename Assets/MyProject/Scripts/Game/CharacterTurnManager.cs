@@ -5,9 +5,9 @@ namespace MyProject
 {
     public class CharacterTurnManager : MonoBehaviour
     {
+        private Action _onTurnEnded;
         private SkillsManager _skillsManager;
         private Character _activeCharacter;
-        private Action _onTurnEnded;
 
         public void Init(SkillsManager skillsManager)
         {
@@ -32,8 +32,15 @@ namespace MyProject
 
         public void CancelCharacterTurn()
         {
+            _skillsManager.OnSkillUsed -= EndCharacterTurn;
+            if (_activeCharacter != null)
+            {
+                _activeCharacter.CancelAnimation();
+            }
+
             _activeCharacter = null;
             _onTurnEnded = null;
+            _skillsManager.CancelProcess();
         }
     }
 }

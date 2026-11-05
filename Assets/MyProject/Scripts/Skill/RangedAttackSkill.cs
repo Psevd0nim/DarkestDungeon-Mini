@@ -1,10 +1,11 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace MyProject
 {
     [Serializable]
-    public class RangedAttackSkill : Skill, ITargetedSkill
+    public class RangedAttackSkill : Skill
     {
         private int _minDamage;
         private int _maxDamage;
@@ -28,10 +29,15 @@ namespace MyProject
             return _enemySquad.GetAliveCharacters();
         }
 
-        public void Execute(Action onCompleted)
+        public override void Execute(Action onCompleted)
         {
-            /*int penalty = Owner.IsFrontliner ? _config.frontlineAttackPenalty : 0;
-            _skillExecutionManager.Attack(Owner, target, UnityEngine.Random.Range(_minDamage, _maxDamage + 1), penalty, Config, onCompleted);*/
+            _skillExecuteCoroutine = _coroutineRunner.StartCoroutine(ExecuteCoroutine(onCompleted));
+        }
+
+        private IEnumerator ExecuteCoroutine(Action onCompleted)
+        {
+            Owner.ShowFeedback("Ranged Attack", UnityEngine.Color.yellow);
+            yield return new UnityEngine.WaitForSeconds(1f);
             onCompleted?.Invoke();
         }
     }

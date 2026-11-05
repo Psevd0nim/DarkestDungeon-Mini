@@ -35,7 +35,7 @@ AnimationClip:
     - time: 0.75
       value: {fileID: -7954960911384535938, guid: 6febeebea0386c84c9f9aaf2ba1aed7d, type: 3}
     attribute: m_Sprite
-    path: body
+    path: view/body
     classID: 212
     script: {fileID: 0}
     flags: 2
@@ -47,7 +47,7 @@ AnimationClip:
   m_ClipBindingConstant:
     genericBindings:
     - serializedVersion: 2
-      path: 3685223346
+      path: 3703580449
       attribute: 0
       script: {fileID: 0}
       typeID: 212
@@ -91,6 +91,13 @@ AnimationClip:
   m_Events:
   - time: 0.75
     functionName: 
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0
+  - time: 0.875
+    functionName: DeathCompleted
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0

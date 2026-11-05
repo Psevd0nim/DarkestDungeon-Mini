@@ -1794,10 +1794,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b67d6483f92438549bc835172201ccc7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MyProject.SkillExecutionManager
-  <IsExecuting>k__BackingField: 0
-  _phase: 0
-  _remaining: 0
-  _recoveryDuration: 0
 --- !u!1 &1582387000
 GameObject:
   m_ObjectHideFlags: 0
@@ -2665,6 +2661,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MyProject.SkillsManager
   _requiredSkillConfig: {fileID: 11400000, guid: 58db4d389ee3349439d10762f79e1e8f, type: 2}
+  _attackWeightMultiplier: 1
+  _defenseWeightMultiplier: 1
 --- !u!1001 &8583662922379012209
 PrefabInstance:
   m_ObjectHideFlags: 0

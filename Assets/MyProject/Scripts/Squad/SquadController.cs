@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 namespace MyProject
@@ -7,11 +7,13 @@ namespace MyProject
     {
         public List<Character> Characters => _characters;
         public Color SquadColor => _squadColor;
-        public Character FrontlineCharacter { get; private set; }
         public CharacterConfig[] InitialFormationData => _initialFormationData;
+
+        public Character FrontlineCharacter { get; private set; }
 
         [SerializeField] private SquadSlot[] _squadSlots = new SquadSlot[4];
         [SerializeField] private Transform _charactersParent;
+
         private CharactersManager _charactersManager;
         private Color _squadColor;
         private bool _needReverse;
@@ -40,9 +42,8 @@ namespace MyProject
                 Character character = _charactersManager.GetCharacterByConfig(formation[i]);
                 character.transform.SetParent(_charactersParent, false);
                 character.transform.position = squadSlot.transform.position;
-                character.AdditionalInit(this, i + 1, _squadColor, _needReverse);
+                character.AdditionalInit(this, squadSlot, _squadColor, _needReverse);
                 character.OnDeath += AfterDeath;
-                character.SetSquadSlot(squadSlot);
                 squadSlot.SetCharacter(character);
                 _characters.Add(character);
             }
@@ -52,12 +53,12 @@ namespace MyProject
 
         public List<Character> GetAliveCharacters()
         {
-            return _characters.FindAll(c => c.IsAlive);
+            return _characters.FindAll(character => character.IsAlive);
         }
 
         public void Clear()
         {
-            foreach (var character in _characters)
+            foreach (Character character in _characters)
             {
                 character.OnDeath -= AfterDeath;
                 character.gameObject.SetActive(false);
@@ -65,7 +66,7 @@ namespace MyProject
             }
 
             _characters.Clear();
-            foreach (var slot in _squadSlots)
+            foreach (SquadSlot slot in _squadSlots)
             {
                 slot.SetCharacter(null);
             }
@@ -81,7 +82,7 @@ namespace MyProject
         private void RefreshFrontline()
         {
             FrontlineCharacter = null;
-            foreach (var slot in _squadSlots)
+            foreach (SquadSlot slot in _squadSlots)
             {
                 if (slot.CharacterInSlot != null && slot.CharacterInSlot.IsAlive)
                 {

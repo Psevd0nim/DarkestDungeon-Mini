@@ -12,5 +12,6 @@ namespace MyProject
         public Character characterPrefab;
         public CharacterData characterData;
         public List<SkillConfig> skillConfigList;
+
     }
 }

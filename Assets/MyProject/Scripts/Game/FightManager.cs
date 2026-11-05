@@ -27,7 +27,6 @@ namespace MyProject
         private SkillsManager _skillsManager;
         private Game_UI_Manager _gameUIManager;
         private CharacterSequence_UI _characterSequence_UI;
-
         private List<Character> _characterQueue = new List<Character>();
         private List<Character> _characterQueueHistory = new List<Character>();
         private List<Character> _chatactersDidTurn = new List<Character>();
@@ -148,6 +147,7 @@ namespace MyProject
 
         private void Canceled()
         {
+            _characterTurnManager.CancelCharacterTurn();
             if (ActiveCharacter != null)
             {
                 ActiveCharacter.SetCharacterActive(false);
@@ -160,8 +160,6 @@ namespace MyProject
             _characterSequence_UI.Clear();
 
             _charactersManager.ClearEnemySquad();
-
-            _characterTurnManager.CancelCharacterTurn();
 
         }
 

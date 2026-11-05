@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace MyProject
 {
     [Serializable]
-    public class HealSkill : Skill, ITargetedSkill
+    public class HealSkill : Skill
     {
         private int _minHealValue;
         private int _maxHealValue;
@@ -28,7 +28,7 @@ namespace MyProject
             return _ownSquad.GetAliveCharacters();
         }
 
-        public void Execute(Action onCompleted)
+        public override void Execute(Action onCompleted)
         {
             /*List<Character> recipients = new List<Character>();
             switch (_config.targetMode)

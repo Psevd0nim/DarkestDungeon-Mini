@@ -9,20 +9,22 @@ namespace MyProject
     public class Skill_UI : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     {
         public event Action<Skill_UI> OnSkillPressed;
+
         public Skill Skill => _skill;
 
         [SerializeField] private Image _skillView;
-        [SerializeField] private Outline _selectedOutline;
+        [SerializeField] private Image _selectedOutline;
         [SerializeField] private TextMeshProUGUI _skillTipText;
         [SerializeField] private GameObject _tip;
         [SerializeField] private CanvasGroup _viewCanvasGroup;
         [SerializeField] private TextMeshProUGUI _nameLabel;
+
         private Skill _skill;
         private bool _interactable;
 
         private void Awake()
         {
-            _selectedOutline.enabled = false;
+            _selectedOutline.gameObject.SetActive(false);
             _tip.SetActive(false);
         }
 
@@ -37,13 +39,14 @@ namespace MyProject
 
         public void SetInteractable(bool active)
         {
-            _interactable = active;
-            _viewCanvasGroup.alpha = active ? 1 : 0.4f;
+            //_interactable = active;
+            _viewCanvasGroup.alpha = active ? 1 : 0.8f;
+            _viewCanvasGroup.interactable = active;
         }
 
         public void SetSelectedActive(bool active)
         {
-            _selectedOutline.enabled = active;
+            _selectedOutline.gameObject.SetActive(true);
         }
 
         public void ShowSkillTip(bool show)
@@ -53,10 +56,7 @@ namespace MyProject
 
         public void SkillButtonPressed()
         {
-            if (_interactable)
-            {
-                OnSkillPressed?.Invoke(this);
-            }
+            OnSkillPressed?.Invoke(this);
         }
 
         public void OnPointerEnter(PointerEventData data)
