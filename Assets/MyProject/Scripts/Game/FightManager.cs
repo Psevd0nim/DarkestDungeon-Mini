@@ -29,7 +29,6 @@ namespace MyProject
         private CharacterSequence_UI _characterSequence_UI;
         private List<Character> _characterQueue = new List<Character>();
         private List<Character> _characterQueueHistory = new List<Character>();
-        private List<Character> _chatactersDidTurn = new List<Character>();
 
         public void Init(CharacterTurnManager characterTurnManager, CharactersManager charactersManager, Game_UI_Manager gameUIManager, SkillsManager skillsManager)
         {
@@ -39,18 +38,6 @@ namespace MyProject
             _skillsManager = skillsManager;
             _characterSequence_UI = gameUIManager.CharacterSequence_UI;
             _charactersManager.OnCharacterDied += AfterCharacterDied;
-
-        }
-
-        private void AfterCharacterDied(Character character)
-        {
-            _characterQueue.Remove(character);
-            _characterSequence_UI.Remove(character);
-            CheckForEndFight();
-        }
-
-        private void CheckForEndFight()
-        {
 
         }
 
@@ -96,11 +83,18 @@ namespace MyProject
                     ChangePhase(BattlePhase.PrepareRound);
                     break;
                 case BattlePhase.EndFight:
+                    EndFight();
                     break;
                 case BattlePhase.Canceled:
                     Canceled();
                     break;
             }
+        }
+
+        private void EndFight()
+        {
+            Canceled();
+            _gameUIManager.ShowGameOver(_charactersManager.PlayerSquadController.GetAliveCharacters().Count > 0);
         }
 
         private void BeforeFight()
@@ -133,7 +127,14 @@ namespace MyProject
         {
             ActiveCharacter.SetCharacterActive(false);
             _characterSequence_UI.SetCharacter_UI_Active(ActiveCharacter, false);
+            _characterSequence_UI.SetCharacterTurnCompleted(ActiveCharacter, true);
             ActiveCharacter = null;
+
+            if(CheckForEndFight())
+            {
+                ChangePhase(BattlePhase.EndFight);
+                return;
+            }
 
             if (_characterQueue.Count == 0)
             {
@@ -172,6 +173,22 @@ namespace MyProject
                 characters[i] = characters[rndIndex];
                 characters[rndIndex] = tempCharacter;
             }
+        }
+
+        private void AfterCharacterDied(Character character)
+        {
+            _characterQueue.Remove(character);
+            _characterSequence_UI.Remove(character);
+        }
+
+        private bool CheckForEndFight()
+        {
+            if(_charactersManager.PlayerSquadController.GetAliveCharacters().Count == 0 
+                || _charactersManager.EnemySquadController.GetAliveCharacters().Count == 0)
+            {
+                return true;
+            }
+            return false;
         }
     }
 }

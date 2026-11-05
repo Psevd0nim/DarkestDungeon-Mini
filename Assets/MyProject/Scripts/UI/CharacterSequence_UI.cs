@@ -34,10 +34,7 @@ namespace MyProject
         public void SetCharacterTurnCompleted(Character character, bool completed)
         {
             Character_UI character_UI = _charactersInSequence.Find(card => card.Character == character);
-            if (character_UI != null)
-            {
-                character_UI.SetTurnCompleted(completed);
-            }
+            character_UI.SetTurnCompleted(completed);
         }
 
         public void Remove(Character character)

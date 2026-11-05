@@ -66,9 +66,9 @@ namespace MyProject
             _visual.PlayAttack(onImpact, onCompleted);
         }
 
-        public void ShowFeedback(string text, Color color)
+        public void ShowFeedback(string text, Color color, Action onCompleted = null)
         {
-            _visual.ShowFeedback(text, color);
+            _visual.ShowFeedback(text, color, onCompleted);
         }
 
         public void CancelAnimation()
@@ -92,12 +92,12 @@ namespace MyProject
             }
         }
 
-        public void Heal(int value)
+        public void Heal(int value, Action onCompleted = null)
         {
             int restored = Mathf.Min(value, MaxHealth - Health);
             Health += restored;
             _healthBar.UpdateHealthBar(Health, MaxHealth);
-            _visual.ShowFeedback("+" + restored, new Color(0.4f, 1, 0.65f));
+            _visual.ShowFeedback("+" + restored, new Color(0.4f, 1, 0.65f), onCompleted);
         }
 
         public void SetCharacterActive(bool active)

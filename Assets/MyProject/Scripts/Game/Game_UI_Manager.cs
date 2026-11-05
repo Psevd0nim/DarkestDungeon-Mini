@@ -13,6 +13,8 @@ namespace MyProject
         [SerializeField] private CharacterSequence_UI _characterSequence_UI;
         [SerializeField] private GameObject _gamePanel;
         [SerializeField] private GameObject _pausePanel;
+        [SerializeField] private GameObject _gameOverPanel;
+        [SerializeField] private TextMeshProUGUI _gameOverText;
         [SerializeField] private TextMeshProUGUI _characterInfo;
         [SerializeField] private Button _resume;
         [SerializeField] private Button _restart;
@@ -49,6 +51,18 @@ namespace MyProject
             _characterInfo.text = character.DisplayName
                 + "\nHP " + character.Health + "/" + character.MaxHealth
                 + "\nSpeed " + character.Speed + "\nAttack " + character.Attack + "\nDefense " + character.Defense;
+        }
+
+        public void ShowGameOver(bool playerWon)
+        {
+            _gameOverPanel.SetActive(true);
+            _gameOverText.text = playerWon ? "You Won!" : "You Lost!";
+        }
+
+        public void Restart()
+        {
+            _gameOverPanel.SetActive(false);
+            _fightManager.RestartFight();
         }
 
         public void SetPaused(bool paused)

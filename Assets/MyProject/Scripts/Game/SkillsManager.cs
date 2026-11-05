@@ -18,6 +18,7 @@ namespace MyProject
         private CharactersManager _charactersManager;
         private SkillBoard_UI _skillBoard_UI;
         private Skill _selectedSkill;
+        private Skill_UI _selectedSkill_UI;
 
         public void Init(Game_UI_Manager gameUIManager, CharactersManager charactersManager)
         {
@@ -34,9 +35,14 @@ namespace MyProject
 
         public void CancelProcess()
         {
-            _skillBoard_UI.ClearBoard();
-            if(_selectedSkill != null)
+            if (_selectedSkill != null)
+            {
                 _selectedSkill.StopExecute();
+                _selectedSkill_UI.SetSelectedActive(false);
+                _selectedSkill = null;
+                _selectedSkill_UI = null;
+            }
+            _skillBoard_UI.ClearBoard();
         }
 
         public bool RollHit(int attack, int defense)
@@ -89,10 +95,13 @@ namespace MyProject
                         melee.Prepare(_charactersManager.GetOpponentSquad(skillsOwner), _skillBoard_UI, RollHit);
                         break;
                     case RangedAttackSkill ranged:
-                        ranged.Prepare(_charactersManager.GetOpponentSquad(skillsOwner));
+                        ranged.Prepare(_charactersManager.GetOpponentSquad(skillsOwner), _skillBoard_UI, RollHit);
                         break;
                     case HealSkill heal:
-                        heal.Prepare(skillsOwner.OwnSquad);
+                        heal.Prepare(skillsOwner.OwnSquad, _skillBoard_UI);
+                        break;
+                    case SkipTurnSkill skip:
+                        skip.Prepare(_skillBoard_UI);
                         break;
                 }
             }
@@ -100,22 +109,25 @@ namespace MyProject
 
         private void AfterSkillPressed(Skill_UI button)
         {
-            if(_selectedSkill != null)
+            if (_selectedSkill != null)
             {
                 if (_selectedSkill == button.Skill)
                     return;
-                else
-                    _selectedSkill.StopExecute();
+
+                _selectedSkill_UI.SetSelectedActive(false);
+                _selectedSkill.StopExecute();
             }
 
             _selectedSkill = button.Skill;
-            button.SetSelectedActive(true);
+            _selectedSkill_UI = button;
+            _selectedSkill_UI.SetSelectedActive(true);
             _selectedSkill.Execute(AfterSkillUsed);
         }
 
         private void AfterSkillUsed()
         {
             _selectedSkill = null;
+            _selectedSkill_UI = null;
             OnSkillUsed?.Invoke();
         }
     }

@@ -26,8 +26,9 @@ namespace MyProject
         {
             _skillsManager.OnSkillUsed -= EndCharacterTurn;
             _activeCharacter = null;
-            _onTurnEnded?.Invoke();
-            //_onTurnEnded = null;
+            Action onTurnEnded = _onTurnEnded;
+            _onTurnEnded = null;
+            onTurnEnded?.Invoke();
         }
 
         public void CancelCharacterTurn()

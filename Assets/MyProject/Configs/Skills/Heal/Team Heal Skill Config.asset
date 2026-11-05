@@ -10,12 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 002dc7e3d5f530a4b841fd77a84a0922, type: 3}
-  m_Name: Team Mend Config
+  m_Name: Team Heal Skill Config
   m_EditorClassIdentifier: Assembly-CSharp::MyProject.HealSkillConfig
-  displayName: Team mend
+  displayName: Team Heal
   sprite: {fileID: 21300000, guid: 198b278a2b742d145be75d0cce611981, type: 3}
-  tip: Choose any living ally to confirm team healing.
-  impactTime: 0.5
+  tip: Heal the whole team.
   minHealValue: 1
   maxHealValue: 2
   targetMode: 2

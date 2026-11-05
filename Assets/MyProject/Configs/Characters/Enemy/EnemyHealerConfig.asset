@@ -17,7 +17,7 @@ MonoBehaviour:
   characterType: 2
   characterPrefab: {fileID: 127278038041213044, guid: b1e13470e66d5db42a06015e1234f9c2, type: 3}
   characterData:
-    health: 10
+    health: 1
     speed: 6
     attack: 10
     defense: 10

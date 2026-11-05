@@ -52,7 +52,7 @@ namespace MyProject
             PlayReaction(true, onCompleted);
         }
 
-        public void ShowFeedback(string text, Color color)
+        public void ShowFeedback(string text, Color color, Action onCompleted = null)
         {
             ClearFeedback();
             _feedback.text = text;
@@ -61,7 +61,11 @@ namespace MyProject
                 .Append(_feedback.transform.DOLocalMoveY(_feedbackStart.y + 0.3825f, 0.85f).SetEase(Ease.Linear))
                 .Insert(0.45f, DOTween.To(() => _feedback.color, value => _feedback.color = value,
                     new Color(color.r, color.g, color.b, 0), 0.4f).SetEase(Ease.Linear))
-                .OnComplete(ClearFeedback);
+                .OnComplete(() => 
+                {
+                    onCompleted?.Invoke();
+                    ClearFeedback();
+                });
         }
 
         public void CancelAnimation()

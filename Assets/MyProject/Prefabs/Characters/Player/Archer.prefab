@@ -27,7 +27,7 @@ PrefabInstance:
     - target: {fileID: 376538739950155485, guid: a1f5975e8cf3d9e45a73c25c63622a2f, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: 3d7e331c1d50a9144856b73aa17540ca, type: 2}
+      objectReference: {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
     - target: {fileID: 696816473487350143, guid: a1f5975e8cf3d9e45a73c25c63622a2f, type: 3}
       propertyPath: m_Size.y
       value: 1.7
@@ -36,6 +36,10 @@ PrefabInstance:
       propertyPath: m_Offset.y
       value: 0.8
       objectReference: {fileID: 0}
+    - target: {fileID: 1181043155559222613, guid: a1f5975e8cf3d9e45a73c25c63622a2f, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: -3768127733405742447, guid: 5215c9af57a84a04ba650ed1bd3431b2, type: 3}
     - target: {fileID: 2967321327896377257, guid: a1f5975e8cf3d9e45a73c25c63622a2f, type: 3}
       propertyPath: m_Color.b
       value: 0.36
@@ -51,7 +55,7 @@ PrefabInstance:
     - target: {fileID: 2967321327896377257, guid: a1f5975e8cf3d9e45a73c25c63622a2f, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: 3d7e331c1d50a9144856b73aa17540ca, type: 2}
+      objectReference: {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
     - target: {fileID: 3049579489239579609, guid: a1f5975e8cf3d9e45a73c25c63622a2f, type: 3}
       propertyPath: m_LocalScale.x
       value: 0.3
@@ -131,7 +135,7 @@ PrefabInstance:
     - target: {fileID: 6888115586398702871, guid: a1f5975e8cf3d9e45a73c25c63622a2f, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: 3d7e331c1d50a9144856b73aa17540ca, type: 2}
+      objectReference: {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
     - target: {fileID: 8381825653182836018, guid: a1f5975e8cf3d9e45a73c25c63622a2f, type: 3}
       propertyPath: m_Name
       value: Archer

@@ -15,7 +15,6 @@ MonoBehaviour:
   displayName: Shoot
   sprite: {fileID: 21300000, guid: 9a7a36d7da97f004db08524e8562ca79, type: 3}
   tip: Choose any living enemy.
-  impactTime: 0.65
   minDamage: 3
   maxDamage: 5
-  frontlineAttackPenalty: 15
+  frontlineAttackPenalty: 3

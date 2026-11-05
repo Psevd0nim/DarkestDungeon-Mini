@@ -1,12 +1,11 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace MyProject
 {
     public enum HealTargetMode
     {
-        SelectedAlly,
-        AdjacentAllies,
-        AllAllies
+        SelectedAlly = 0,
+        AllAllies = 2
     }
 
     [CreateAssetMenu]
@@ -18,7 +17,7 @@ namespace MyProject
 
         public override Skill CreateSkill()
         {
-            return new HealSkill(minHealValue, maxHealValue, this);
+            return new HealSkill(minHealValue, maxHealValue, targetMode, this);
         }
 
         public override string GetDescription()
@@ -26,9 +25,6 @@ namespace MyProject
             string recipients;
             switch (targetMode)
             {
-                case HealTargetMode.AdjacentAllies:
-                    recipients = "Selected ally and adjacent positions.";
-                    break;
                 case HealTargetMode.AllAllies:
                     recipients = "All living allies.";
                     break;

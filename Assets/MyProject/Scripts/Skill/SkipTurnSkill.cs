@@ -1,14 +1,22 @@
 using System;
 using System.Collections;
+using UnityEngine;
 
 namespace MyProject
 {
     [Serializable]
     public class SkipTurnSkill : Skill
     {
+        private SkillBoard_UI _skillBoard_UI;
+
         public SkipTurnSkill(SkipTurnSkillConfig config) : base(config)
         {
 
+        }
+
+        public void Prepare(SkillBoard_UI skillBoard_UI)
+        {
+            _skillBoard_UI = skillBoard_UI;
         }
 
         public override void Execute(Action onCompleted)
@@ -18,8 +26,10 @@ namespace MyProject
 
         private IEnumerator ExecuteCoroutine(Action onCompleted)
         {
-            Owner.ShowFeedback("Wait", UnityEngine.Color.white);
-            yield return new UnityEngine.WaitForSeconds(1f);
+            _skillBoard_UI.SetInteractable(false);
+            bool showingFeedbackIsEnd = false;
+            Owner.ShowFeedback("Wait", Color.white, () => showingFeedbackIsEnd = true);
+            yield return new WaitUntil(() => showingFeedbackIsEnd);
             onCompleted?.Invoke();
         }
     }

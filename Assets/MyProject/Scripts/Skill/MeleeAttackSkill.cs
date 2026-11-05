@@ -36,6 +36,12 @@ namespace MyProject
             _skillExecuteCoroutine = _coroutineRunner.StartCoroutine(ExecuteCoroutine(onCompleted));
         }
 
+        public override void StopExecute()
+        {
+            ClearTargetSelection();
+            base.StopExecute();
+        }
+
         private IEnumerator ExecuteCoroutine(Action onCompleted)
         {
             _isTargetSelected = false;
@@ -56,20 +62,12 @@ namespace MyProject
             }
             else
             {
-                _target.ShowFeedback("Miss", Color.yellow);
-                yield return new WaitForSeconds(1f);
-                isTargetAnimEnd = true;
+                _target.ShowFeedback("Miss", Color.yellow, () => isTargetAnimEnd = true);
             }
 
             yield return new WaitUntil(() => isAttackAnimationEnd && isTargetAnimEnd);
 
             onCompleted?.Invoke();
-        }
-
-        public override void StopExecute()
-        {
-            ClearTargetSelection();
-            base.StopExecute();
         }
 
         private void ShowTarget()

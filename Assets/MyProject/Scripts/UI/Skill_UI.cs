@@ -46,7 +46,7 @@ namespace MyProject
 
         public void SetSelectedActive(bool active)
         {
-            _selectedOutline.gameObject.SetActive(true);
+            _selectedOutline.gameObject.SetActive(active);
         }
 
         public void ShowSkillTip(bool show)
