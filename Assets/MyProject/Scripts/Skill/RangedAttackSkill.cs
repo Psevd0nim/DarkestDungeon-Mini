@@ -33,8 +33,9 @@ namespace MyProject
             _rollHit = rollHit;
         }
 
-        public override void Execute(Action onCompleted)
+        public override void Execute(Action onCompleted, bool isPlayerControlled = true)
         {
+            _isPlayerControlled = isPlayerControlled;
             _skillExecuteCoroutine = _coroutineRunner.StartCoroutine(ExecuteCoroutine(onCompleted));
         }
 
@@ -49,7 +50,15 @@ namespace MyProject
             _isTargetSelected = false;
             ShowTargets();
 
-            yield return new WaitUntil(() => _isTargetSelected);
+            if (_isPlayerControlled)
+            {
+                yield return new WaitUntil(() => _isTargetSelected);
+            }
+            else
+            {
+                yield return new WaitForSeconds(0.5f);
+                AfterTargetSelected(_targets[Random.Range(0, _targets.Count)]);
+            }
 
             ClearTargetsSelection();
             _skillBoard_UI.SetInteractable(false);
@@ -83,7 +92,10 @@ namespace MyProject
             _targets = _enemySquad.GetAliveCharacters();
             foreach (Character target in _targets)
             {
-                target.OnPressed += AfterTargetSelected;
+                if (_isPlayerControlled)
+                {
+                    target.OnPressed += AfterTargetSelected;
+                }
                 target.SetTargetActive(true);
             }
         }

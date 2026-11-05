@@ -23,6 +23,7 @@ namespace MyProject
         public SquadController OwnSquad { get; private set; }
         public string DisplayName { get; private set; }
         public Sprite Portrait { get; private set; }
+        public CharacterConfig Config { get; private set; }
 
         [SerializeField] private HealthBar _healthBar;
         [SerializeField] private Arrow _activeCharacterSign;
@@ -38,6 +39,7 @@ namespace MyProject
 
         public void Init(CharacterConfig config, List<Skill> skills)
         {
+            Config = config;
             CharacterData data = config.characterData;
             DisplayName = string.IsNullOrEmpty(config.displayName) ? config.characterType.ToString() : config.displayName;
             Portrait = config.portrait;
@@ -80,7 +82,7 @@ namespace MyProject
         {
             Health = Mathf.Max(0, Health - damage);
             _healthBar.UpdateHealthBar(Health, MaxHealth);
-            _visual.ShowFeedback("-" + damage, new Color(1, 0.45f, 0.35f));
+            _visual.ShowFeedback("-" + damage, Color.red);
             if (Health == 0)
             {
                 Die();
@@ -97,7 +99,7 @@ namespace MyProject
             int restored = Mathf.Min(value, MaxHealth - Health);
             Health += restored;
             _healthBar.UpdateHealthBar(Health, MaxHealth);
-            _visual.ShowFeedback("+" + restored, new Color(0.4f, 1, 0.65f), onCompleted);
+            _visual.ShowFeedback("+" + value, Color.green, onCompleted);
         }
 
         public void SetCharacterActive(bool active)

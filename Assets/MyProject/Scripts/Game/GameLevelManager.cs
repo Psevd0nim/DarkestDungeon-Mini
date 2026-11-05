@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 
 namespace MyProject
@@ -15,7 +15,7 @@ namespace MyProject
         public override void Init(AppServices services)
         {
             _fightManager.Init(_characterTurnManager, _charactersManager, _gameUIManager, _skillsManager);
-            _characterTurnManager.Init(_skillsManager);
+            _characterTurnManager.Init(_skillsManager, _charactersManager);
             _gameUIManager.Init(_factory, _fightManager);
             _skillsManager.Init(_gameUIManager, _charactersManager);
             _charactersManager.Init(_factory, _gameUIManager, _skillsManager);

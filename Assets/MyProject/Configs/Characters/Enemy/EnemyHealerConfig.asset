@@ -12,15 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f989c6f5d6a2e194baa96fce5861ba79, type: 3}
   m_Name: EnemyHealerConfig
   m_EditorClassIdentifier: Assembly-CSharp::MyProject.CharacterConfig
-  displayName: Pyromancer
+  displayName: Enemy Healer
   portrait: {fileID: 21300000, guid: 6dee561ff10297b46b2608fea04c0398, type: 2}
   characterType: 2
   characterPrefab: {fileID: 127278038041213044, guid: b1e13470e66d5db42a06015e1234f9c2, type: 3}
   characterData:
-    health: 1
+    health: 15
     speed: 6
     attack: 10
-    defense: 10
+    defense: 9
   skillConfigList:
   - {fileID: 11400000, guid: c595d6bb9e788784bbf085fecfa7c554, type: 2}
   - {fileID: 11400000, guid: cb653d12476c52e41964cef88e6203d9, type: 2}

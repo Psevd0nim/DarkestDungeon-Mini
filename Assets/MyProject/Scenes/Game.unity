@@ -155,7 +155,6 @@ Transform:
   - {fileID: 1347316037}
   - {fileID: 675175883}
   - {fileID: 2098543560}
-  - {fileID: 1520712399}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &116888776
@@ -1019,7 +1018,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Game_UI_Manager
   _skillBoard_UI: {fileID: 324014199}
   _characterSequence_UI: {fileID: 729464760}
-  _gamePanel: {fileID: 363539671}
   _pausePanel: {fileID: 1032625535}
   _gameOverPanel: {fileID: 1319355667}
   _gameOverText: {fileID: 1634352748}
@@ -1767,9 +1765,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 79d3bda07277d1a47ab24727a25e7931, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MyProject.CharactersManager
-  _characterHubConfig: {fileID: 11400000, guid: fdb9b0baa7f135744982e94983c7b9d8, type: 2}
   _playerSquadController: {fileID: 1128047637}
   _enemySquadController: {fileID: 390995396}
+  _playerCharacterHubConfig: {fileID: 11400000, guid: fdb9b0baa7f135744982e94983c7b9d8, type: 2}
+  _enemyCharacterHubConfig: {fileID: 11400000, guid: 668f6fdc001ab194cbc14bc636003343, type: 2}
   _fillPlayerSquadByRandom: 0
   _playerSquadConfig: {fileID: 11400000, guid: c1e0c39b266c8994196668bba55dbd35, type: 2}
   _fillEnemySquadByRandom: 0
@@ -2151,50 +2150,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d65aa2e5339b8454cbbd0ed6529be36d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MyProject.FightManager
---- !u!1 &1520712398
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1520712399}
-  - component: {fileID: 1520712400}
-  m_Layer: 0
-  m_Name: SkillExecutionManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1520712399
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1520712398}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 70836580}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1520712400
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1520712398}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b67d6483f92438549bc835172201ccc7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::MyProject.SkillExecutionManager
 --- !u!1 &1582387000
 GameObject:
   m_ObjectHideFlags: 0

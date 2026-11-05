@@ -9,8 +9,6 @@ namespace MyProject
     {
         public event Action OnSkillUsed;
 
-        public bool IsPaused { get; set; }
-
         [SerializeField] private SkipTurnSkillConfig _requiredSkillConfig;
         [SerializeField, Min(0f)] private float _attackWeightMultiplier = 1f;
         [SerializeField, Min(0f)] private float _defenseWeightMultiplier = 1f;
@@ -19,6 +17,7 @@ namespace MyProject
         private SkillBoard_UI _skillBoard_UI;
         private Skill _selectedSkill;
         private Skill_UI _selectedSkill_UI;
+        private bool _isPlayerControlled;
 
         public void Init(Game_UI_Manager gameUIManager, CharactersManager charactersManager)
         {
@@ -27,10 +26,18 @@ namespace MyProject
             _skillBoard_UI.OnSkillPressed += AfterSkillPressed;
         }
 
-        public void ShowSkills(List<Skill> skills, Character skillsOwner)
+        public void ShowSkills(List<Skill> skills, Character skillsOwner, bool isPlayerControlled)
         {
+            _isPlayerControlled = isPlayerControlled;
             PrepareSkills(skills, skillsOwner);
             _skillBoard_UI.ShowSkills(skills);
+            if (!_isPlayerControlled)
+            {
+                _skillBoard_UI.SetInteractable(false);
+                List<Skill> availableSkills = skills.FindAll(skill => skill.CanUse);
+                Skill selectedSkill = availableSkills[UnityEngine.Random.Range(0, availableSkills.Count)];
+                AfterSkillPressed(_skillBoard_UI.GetSkill_UI(selectedSkill));
+            }
         }
 
         public void CancelProcess()
@@ -121,7 +128,7 @@ namespace MyProject
             _selectedSkill = button.Skill;
             _selectedSkill_UI = button;
             _selectedSkill_UI.SetSelectedActive(true);
-            _selectedSkill.Execute(AfterSkillUsed);
+            _selectedSkill.Execute(AfterSkillUsed, _isPlayerControlled);
         }
 
         private void AfterSkillUsed()

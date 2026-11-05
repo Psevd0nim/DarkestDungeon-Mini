@@ -12,9 +12,10 @@ namespace MyProject
         public SquadController PlayerSquadController => _playerSquadController;
         public SquadController EnemySquadController => _enemySquadController;
 
-        [SerializeField] private CharacterHubConfig _characterHubConfig;
         [SerializeField] private SquadController _playerSquadController;
         [SerializeField] private SquadController _enemySquadController;
+        [SerializeField] private CharacterHubConfig _playerCharacterHubConfig;
+        [SerializeField] private CharacterHubConfig _enemyCharacterHubConfig;
         [SerializeField] private bool _fillPlayerSquadByRandom;
         [SerializeField] private SquadConfig _playerSquadConfig;
         [SerializeField] private bool _fillEnemySquadByRandom;
@@ -31,13 +32,13 @@ namespace MyProject
 
         public void FillPlayerSquad()
         {
-            CharacterConfig[] _currentFormationData = ChooseFormation(_playerSquadConfig, _fillPlayerSquadByRandom);
+            CharacterConfig[] _currentFormationData = ChooseFormation(_playerSquadConfig, _fillPlayerSquadByRandom, _playerCharacterHubConfig);
             _playerSquadController.FillFormation(_currentFormationData);
         }
 
         public void FillEnemySquad()
         {
-            CharacterConfig[] _currentFormationData = ChooseFormation(_enemySquadConfig, _fillEnemySquadByRandom);
+            CharacterConfig[] _currentFormationData = ChooseFormation(_enemySquadConfig, _fillEnemySquadByRandom, _enemyCharacterHubConfig);
             _enemySquadController.FillFormation(_currentFormationData);
         }
 
@@ -46,7 +47,7 @@ namespace MyProject
             squadController.FillFormation(formation);
         }
 
-        private CharacterConfig[] ChooseFormation(SquadConfig config, bool random)
+        private CharacterConfig[] ChooseFormation(SquadConfig config, bool random, CharacterHubConfig characterHubConfig)
         {
             if (!random && config != null)
             {
@@ -56,7 +57,7 @@ namespace MyProject
             CharacterConfig[] result = new CharacterConfig[4];
             for (int i = 0; i < result.Length; i++)
             {
-                result[i] = _characterHubConfig.GetRandomCharacterConfig();
+                result[i] = characterHubConfig.GetRandomCharacterConfig();
             }
 
             return result;
@@ -86,6 +87,19 @@ namespace MyProject
         public SquadController GetOpponentSquad(Character character)
         {
             return IsPlayer(character) ? _enemySquadController : _playerSquadController;
+        }
+
+        public void CancelAnimations()
+        {
+            foreach (Character character in _playerSquadController.Characters)
+            {
+                character.CancelAnimation();
+            }
+
+            foreach (Character character in _enemySquadController.Characters)
+            {
+                character.CancelAnimation();
+            }
         }
 
         public void ClearEnemySquad()

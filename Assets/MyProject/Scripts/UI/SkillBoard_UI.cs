@@ -29,6 +29,11 @@ namespace MyProject
             }
         }
 
+        public Skill_UI GetSkill_UI(Skill skill)
+        {
+            return _buttons.Find(button => button.Skill == skill);
+        }
+
         public void SetInteractable(bool active)
         {
             foreach (Skill_UI button in _buttons)

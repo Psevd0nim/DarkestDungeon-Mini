@@ -17,10 +17,10 @@ MonoBehaviour:
   characterType: 0
   characterPrefab: {fileID: 8558013090060576990, guid: 51ec5fd274872184197996135d8779aa, type: 3}
   characterData:
-    health: 1
-    speed: 20
-    attack: 10
-    defense: 10
+    health: 18
+    speed: 4
+    attack: 14
+    defense: 12
   skillConfigList:
   - {fileID: 11400000, guid: d9aeb144321b6484ca8c1d8eab1f0c71, type: 2}
   - {fileID: 11400000, guid: cb653d12476c52e41964cef88e6203d9, type: 2}

@@ -12,15 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f989c6f5d6a2e194baa96fce5861ba79, type: 3}
   m_Name: EnemyArcherConfig
   m_EditorClassIdentifier: Assembly-CSharp::MyProject.CharacterConfig
-  displayName: Crimson Archer
+  displayName: Enemy Archer
   portrait: {fileID: 21300000, guid: 40fee63b3c34f1b4ab895ee4033fa41d, type: 2}
   characterType: 1
   characterPrefab: {fileID: 3332420271410466453, guid: c81f2cb42d694564a9e30e1e2271c505, type: 3}
   characterData:
-    health: 1
-    speed: 10
-    attack: 10
-    defense: 10
+    health: 12
+    speed: 8
+    attack: 11
+    defense: 7
   skillConfigList:
   - {fileID: 11400000, guid: cb653d12476c52e41964cef88e6203d9, type: 2}
   - {fileID: 11400000, guid: d9aeb144321b6484ca8c1d8eab1f0c71, type: 2}

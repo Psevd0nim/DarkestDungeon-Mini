@@ -12,15 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f989c6f5d6a2e194baa96fce5861ba79, type: 3}
   m_Name: HealerConfig
   m_EditorClassIdentifier: Assembly-CSharp::MyProject.CharacterConfig
-  displayName: Wanderer
+  displayName: Healer
   portrait: {fileID: 21300000, guid: 0f6f4b9b933f0d4499db5def39ffcd2a, type: 2}
   characterType: 2
   characterPrefab: {fileID: 6144761824707280000, guid: 034737889df247f4191159cf34cd7a6e, type: 3}
   characterData:
-    health: 1
+    health: 15
     speed: 6
     attack: 10
-    defense: 10
+    defense: 9
   skillConfigList:
   - {fileID: 11400000, guid: c595d6bb9e788784bbf085fecfa7c554, type: 2}
   - {fileID: 11400000, guid: 15d67a48d4f90c24e9e2b52400e8fd75, type: 2}

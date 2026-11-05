@@ -9,6 +9,10 @@ namespace MyProject
     {
         [SerializeField] private Animator _animator;
         [SerializeField] private TextMeshPro _feedback;
+        [SerializeField] private float _feedbackMoveHeight = 0.4f;
+        [SerializeField] private float _feedbackMoveDuration = 0.85f;
+        [SerializeField] private float _feedbackFadeDelay = 0.45f;
+        [SerializeField] private float _feedbackFadeDuration = 0.4f;
 
         private Action _onAttackImpact;
         private Action _onAttackCompleted;
@@ -44,12 +48,18 @@ namespace MyProject
 
         public void PlayHurt(Action onCompleted = null)
         {
-            PlayReaction(false, onCompleted);
+            _onReactionCompleted = onCompleted;
+            _animator.ResetTrigger("Reset");
+            _animator.SetBool("IsDead", false);
+            _animator.SetTrigger("Hurt");
         }
 
         public void PlayDeath(Action onCompleted = null)
         {
-            PlayReaction(true, onCompleted);
+            _onReactionCompleted = onCompleted;
+            _animator.ResetTrigger("Reset");
+            _animator.SetBool("IsDead", true);
+            _animator.SetTrigger("Hurt");
         }
 
         public void ShowFeedback(string text, Color color, Action onCompleted = null)
@@ -57,10 +67,21 @@ namespace MyProject
             ClearFeedback();
             _feedback.text = text;
             _feedback.color = color;
+            float targetY = _feedbackStart.y + _feedbackMoveHeight;
+            Color transparentColor = color;
+            transparentColor.a = 0f;
+            Tweener moveTween = _feedback.transform.DOLocalMoveY(targetY, _feedbackMoveDuration)
+                .SetEase(Ease.Linear);
+            Tweener fadeTween = DOTween.To(
+                () => _feedback.color,
+                value => _feedback.color = value,
+                transparentColor,
+                _feedbackFadeDuration)
+                .SetEase(Ease.Linear);
+
             _feedbackSequence = DOTween.Sequence()
-                .Append(_feedback.transform.DOLocalMoveY(_feedbackStart.y + 0.3825f, 0.85f).SetEase(Ease.Linear))
-                .Insert(0.45f, DOTween.To(() => _feedback.color, value => _feedback.color = value,
-                    new Color(color.r, color.g, color.b, 0), 0.4f).SetEase(Ease.Linear))
+                .Append(moveTween)
+                .Insert(_feedbackFadeDelay, fadeTween)
                 .OnComplete(() => 
                 {
                     onCompleted?.Invoke();
@@ -79,6 +100,7 @@ namespace MyProject
             _animator.SetTrigger("Reset");
         }
 
+        // Called by an Animation Event in an animation clip.
         public void AttackImpact()
         {
             Action callback = _onAttackImpact;
@@ -86,6 +108,7 @@ namespace MyProject
             callback?.Invoke();
         }
 
+        // Called by an Animation Event in an animation clip.
         public void AttackCompleted()
         {
             Action callback = _onAttackCompleted;
@@ -93,6 +116,7 @@ namespace MyProject
             callback?.Invoke();
         }
 
+        // Called by an Animation Event in an animation clip.
         public void HurtCompleted()
         {
             if (_animator.GetBool("IsDead"))
@@ -103,17 +127,10 @@ namespace MyProject
             CompleteReaction();
         }
 
+        // Called by an Animation Event in an animation clip.
         public void DeathCompleted()
         {
             CompleteReaction();
-        }
-
-        private void PlayReaction(bool isDead, Action onCompleted)
-        {
-            _onReactionCompleted = onCompleted;
-            _animator.ResetTrigger("Reset");
-            _animator.SetBool("IsDead", isDead);
-            _animator.SetTrigger("Hurt");
         }
 
         private void CompleteReaction()

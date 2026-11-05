@@ -1,4 +1,4 @@
-using TMPro;
+﻿using TMPro;
 using UnityEngine.UI;
 using UnityEngine;
 
@@ -11,7 +11,6 @@ namespace MyProject
 
         [SerializeField] private SkillBoard_UI _skillBoard_UI;
         [SerializeField] private CharacterSequence_UI _characterSequence_UI;
-        [SerializeField] private GameObject _gamePanel;
         [SerializeField] private GameObject _pausePanel;
         [SerializeField] private GameObject _gameOverPanel;
         [SerializeField] private TextMeshProUGUI _gameOverText;
@@ -27,10 +26,9 @@ namespace MyProject
             _fightManager = fightManager;
             _skillBoard_UI.Init(factory);
             _characterSequence_UI.Init(factory);
-            //_resume.onClick.AddListener(_fightManager.Resume);
+            _resume.onClick.AddListener(_fightManager.Resume);
             _restart.onClick.AddListener(_fightManager.RestartFight);
             _leave.onClick.AddListener(_fightManager.LeaveBattle);
-            SetPaused(false);
         }
 
         private void Update()
@@ -42,15 +40,21 @@ namespace MyProject
 
             if (UnityEngine.InputSystem.Keyboard.current.escapeKey.wasPressedThisFrame)
             {
-                //_fightManager.TogglePause();
+                _fightManager.TogglePause();
             }
         }
 
         public void ShowCharacter(Character character)
         {
+            _characterInfo.gameObject.SetActive(true);
             _characterInfo.text = character.DisplayName
-                + "\nHP " + character.Health + "/" + character.MaxHealth
-                + "\nSpeed " + character.Speed + "\nAttack " + character.Attack + "\nDefense " + character.Defense;
+                + "\nSpeed " + character.Speed + "\nAttack " + character.Attack
+                + "\nDefense " + character.Defense;
+        }
+
+        public void ClearCharacterInfo()
+        {
+            _characterInfo.text = "";
         }
 
         public void ShowGameOver(bool playerWon)
@@ -67,8 +71,8 @@ namespace MyProject
 
         public void SetPaused(bool paused)
         {
-            _gamePanel.SetActive(!paused);
             _pausePanel.SetActive(paused);
         }
+
     }
 }

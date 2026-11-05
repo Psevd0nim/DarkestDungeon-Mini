@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -20,7 +20,6 @@ namespace MyProject
         [SerializeField] private TextMeshProUGUI _nameLabel;
 
         private Skill _skill;
-        private bool _interactable;
 
         private void Awake()
         {
@@ -39,7 +38,6 @@ namespace MyProject
 
         public void SetInteractable(bool active)
         {
-            //_interactable = active;
             _viewCanvasGroup.alpha = active ? 1 : 0.8f;
             _viewCanvasGroup.interactable = active;
         }

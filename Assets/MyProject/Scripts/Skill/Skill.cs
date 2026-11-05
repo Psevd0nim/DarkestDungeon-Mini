@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -14,6 +14,7 @@ namespace MyProject
 
         private protected ICoroutineRunner _coroutineRunner;
         private protected Coroutine _skillExecuteCoroutine;
+        private protected bool _isPlayerControlled;
 
         protected Skill(SkillConfig config)
         {
@@ -26,7 +27,7 @@ namespace MyProject
             _coroutineRunner = coroutineRunner;
         }
 
-        public abstract void Execute(Action onCompleted);
+        public abstract void Execute(Action onCompleted, bool isPlayerControlled = true);
 
         public virtual void StopExecute()
         {

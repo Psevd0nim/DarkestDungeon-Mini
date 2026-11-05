@@ -31,8 +31,9 @@ namespace MyProject
             _rollHit = rollHit;
         }
 
-        public override void Execute(Action onCompleted)
+        public override void Execute(Action onCompleted, bool isPlayerControlled = true)
         {
+            _isPlayerControlled = isPlayerControlled;
             _skillExecuteCoroutine = _coroutineRunner.StartCoroutine(ExecuteCoroutine(onCompleted));
         }
 
@@ -47,7 +48,15 @@ namespace MyProject
             _isTargetSelected = false;
             ShowTarget();
 
-            yield return new WaitUntil(() => _isTargetSelected);
+            if (_isPlayerControlled)
+            {
+                yield return new WaitUntil(() => _isTargetSelected);
+            }
+            else
+            {
+                yield return new WaitForSeconds(0.5f);
+                AfterTargetSelected(_target);
+            }
 
             ClearTargetSelection();
             _skillBoard_UI.SetInteractable(false);
@@ -73,7 +82,10 @@ namespace MyProject
         private void ShowTarget()
         {
             _target = _enemySquad.FrontlineCharacter;
-            _target.OnPressed += AfterTargetSelected;
+            if (_isPlayerControlled)
+            {
+                _target.OnPressed += AfterTargetSelected;
+            }
             _target.SetTargetActive(true);
         }
 

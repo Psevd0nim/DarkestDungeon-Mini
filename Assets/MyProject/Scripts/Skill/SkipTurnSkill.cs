@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using UnityEngine;
 
@@ -19,8 +19,9 @@ namespace MyProject
             _skillBoard_UI = skillBoard_UI;
         }
 
-        public override void Execute(Action onCompleted)
+        public override void Execute(Action onCompleted, bool isPlayerControlled = true)
         {
+            _isPlayerControlled = isPlayerControlled;
             _skillExecuteCoroutine = _coroutineRunner.StartCoroutine(ExecuteCoroutine(onCompleted));
         }
 

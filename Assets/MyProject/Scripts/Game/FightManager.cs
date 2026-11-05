@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,6 +21,8 @@ namespace MyProject
 
         public BattlePhase CurrentPhase { get; private set; }
         public Character ActiveCharacter { get; private set; }
+        public bool IsPaused { get; private set; }
+        public bool IsGameOver { get; private set; }
 
         private CharacterTurnManager _characterTurnManager;
         private CharactersManager _charactersManager;
@@ -29,6 +31,8 @@ namespace MyProject
         private CharacterSequence_UI _characterSequence_UI;
         private List<Character> _characterQueue = new List<Character>();
         private List<Character> _characterQueueHistory = new List<Character>();
+        private List<CharacterConfig> _initialTurnOrder = new List<CharacterConfig>();
+        private bool _wasRestarted;
 
         public void Init(CharacterTurnManager characterTurnManager, CharactersManager charactersManager, Game_UI_Manager gameUIManager, SkillsManager skillsManager)
         {
@@ -38,7 +42,6 @@ namespace MyProject
             _skillsManager = skillsManager;
             _characterSequence_UI = gameUIManager.CharacterSequence_UI;
             _charactersManager.OnCharacterDied += AfterCharacterDied;
-
         }
 
         public void StartFight()
@@ -48,15 +51,39 @@ namespace MyProject
 
         public void RestartFight()
         {
+            IsGameOver = false;
             ChangePhase(BattlePhase.Canceled);
             _charactersManager.FillSquadByFormation(_charactersManager.PlayerSquadController, _charactersManager.PlayerSquadController.InitialFormationData);
             _charactersManager.FillSquadByFormation(_charactersManager.EnemySquadController, _charactersManager.EnemySquadController.InitialFormationData);
+            _wasRestarted = true;
             ChangePhase(BattlePhase.PrepareRound);
         }
 
         public void LeaveBattle()
         {
             ChangePhase(BattlePhase.Canceled);
+        }
+
+        public void TogglePause()
+        {
+            if (IsGameOver)
+            {
+                return;
+            }
+
+            SetPaused(!IsPaused);
+        }
+
+        public void Resume()
+        {
+            SetPaused(false);
+        }
+
+        private void SetPaused(bool paused)
+        {
+            IsPaused = paused;
+            Time.timeScale = paused ? 0f : 1f;
+            _gameUIManager.SetPaused(paused);
         }
 
         private void ChangePhase(BattlePhase battlePhase)
@@ -93,6 +120,7 @@ namespace MyProject
 
         private void EndFight()
         {
+            IsGameOver = true;
             Canceled();
             _gameUIManager.ShowGameOver(_charactersManager.PlayerSquadController.GetAliveCharacters().Count > 0);
         }
@@ -106,8 +134,27 @@ namespace MyProject
         private void PrepareRound()
         {
             List<Character> aliveCharacters = _charactersManager.GetAliveCharacters();
-            ShuffleList(aliveCharacters);
-            _characterQueue = aliveCharacters.OrderByDescending(character => character.Speed).ToList();
+            if (_wasRestarted)
+            {
+                _characterQueue.Clear();
+                foreach (CharacterConfig config in _initialTurnOrder)
+                {
+                    Character character = aliveCharacters.Find(candidate => candidate.Config == config);
+                    _characterQueue.Add(character);
+                    aliveCharacters.Remove(character);
+                }
+
+                _wasRestarted = false;
+            }
+            else
+            {
+                ShuffleList(aliveCharacters);
+                _characterQueue = aliveCharacters.OrderByDescending(character => character.Speed).ToList();
+                if (_initialTurnOrder.Count == 0)
+                {
+                    _initialTurnOrder = _characterQueue.Select(character => character.Config).ToList();
+                }
+            }
             _characterQueueHistory = _characterQueue.ToList();
             _characterSequence_UI.ShowCharacterSequence(_characterQueueHistory.Where(x => x.IsAlive).ToList());
             ChangePhase(BattlePhase.RoundLoop);
@@ -118,6 +165,7 @@ namespace MyProject
             ActiveCharacter = _characterQueue.First();
             _characterQueue.Remove(ActiveCharacter);
             ActiveCharacter.SetCharacterActive(true);
+            _gameUIManager.ShowCharacter(ActiveCharacter);
 
             _characterSequence_UI.SetCharacter_UI_Active(ActiveCharacter, true);
             _characterTurnManager.StartCharacterTurn(ActiveCharacter, AfterCharacterMadeTurn);
@@ -149,6 +197,8 @@ namespace MyProject
         private void Canceled()
         {
             _characterTurnManager.CancelCharacterTurn();
+            _charactersManager.CancelAnimations();
+
             if (ActiveCharacter != null)
             {
                 ActiveCharacter.SetCharacterActive(false);
@@ -159,6 +209,7 @@ namespace MyProject
             _characterQueue.Clear();
             _characterQueueHistory.Clear();
             _characterSequence_UI.Clear();
+            _gameUIManager.ClearCharacterInfo();
 
             _charactersManager.ClearEnemySquad();
 
